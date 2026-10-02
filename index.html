@@ -625,6 +625,9 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 .stsel{font-weight:700}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 #accN{position:absolute;top:-6px;right:-6px}
+.team-it{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line-2);border-radius:14px;padding:10px 12px}
+.team-it div{display:flex;flex-direction:column}
+.team-it .btn{padding:8px 14px;font-size:.8rem}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none;filter:none}}
 </style>
 
@@ -1756,7 +1759,7 @@ deepLink();
 
 /* ===== Comptes, espace propriétaire et commandes en ligne (Supabase) ===== */
 var CFG=window.GS_CLOUD||{}, sb=null;
-var cloud={user:null, profile:null, staff:false, orders:[], newCount:0, points:0, ready:false};
+var cloud={user:null, profile:null, staff:false, owner:false, orders:[], newCount:0, points:0, ready:false};
 try{ if(CFG.url&&CFG.key&&window.supabase) sb=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}); }catch(e){ sb=null; }
 var STATUS=["nouvelle","confirmée","payée","en livraison","livrée","annulée"];
 var STATUS_LBL={"nouvelle":"Nouvelle","confirmée":"Confirmée","payée":"Payée","en livraison":"En livraison","livrée":"Livrée","annulée":"Annulée"};
@@ -1788,17 +1791,18 @@ function cloudPoints(){ return cloud.orders.filter(function(o){return o.status==
 function onSession(session){
   var u=session&&session.user||null, was=cloud.user&&cloud.user.id;
   cloud.user=u;
-  if(!u){ cloud.profile=null; cloud.staff=false; cloud.orders=[]; cloud.newCount=0; state.canEdit=false; $("#sellerBtn").hidden=true; renderBanner(); renderGrid(); accLabel(); return; }
+  if(!u){ cloud.profile=null; cloud.staff=false; cloud.owner=false; cloud.orders=[]; cloud.newCount=0; state.canEdit=false; $("#sellerBtn").hidden=true; renderBanner(); renderGrid(); accLabel(); return; }
   if(was===u.id&&cloud.ready) return;
   cloud.ready=true;
   Promise.all([
     sb.from("profiles").select("*").eq("id",u.id).maybeSingle(),
     sb.rpc("is_staff"),
+    sb.rpc("is_owner"),
     sb.from("orders").select("*").eq("user_id",u.id).order("created_at",{ascending:false}).limit(50)
   ]).then(function(r){
     cloud.profile=r[0].data||{id:u.id,name:(u.user_metadata||{}).name||"",phone:(u.user_metadata||{}).phone||"",favs:[]};
-    cloud.staff=!!r[1].data;
-    cloud.orders=r[2].data||[];
+    cloud.staff=!!r[1].data; cloud.owner=!!r[2].data;
+    cloud.orders=r[3].data||[];
     // favoris : on réunit ceux du téléphone et ceux du compte
     var f=(cloud.profile.favs||[]).concat(state.favs).filter(function(x,i,a){return a.indexOf(x)===i&&DATA.products.some(function(p){return p.id===x})});
     var changed=f.length!==(cloud.profile.favs||[]).length; state.favs=f; saveFavs(true); if(changed) syncFavs();
@@ -1883,13 +1887,14 @@ function openAccount(view){
       '<div class="oh"><b class="num">'+fcfa(o.total)+'</b>'+(ask?'<a class="lnk" href="'+ask+'" target="_blank" rel="noopener">Suivre sur WhatsApp ↗</a>':'')+'</div>'+trackHTML(o.status)+'</div>';
   }).join(""):'<div class="empty">Vos commandes passées avec ce compte apparaîtront ici, sur tous vos appareils.</div>';
   openLayer('<div class="dh"><h2>Bonjour '+esc((p.name||"").split(" ")[0]||"à vous")+'</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db">'+
-    (cloud.staff?'<div class="staffbox"><span class="eyebrow">Espace propriétaire</span><div class="row"><button class="btn primary" id="goDash">Commandes'+(cloud.newCount?' · '+cloud.newCount+' nouvelle'+(cloud.newCount>1?'s':''):'')+'</button><button class="btn ghost" id="goSell">Gérer les articles</button></div></div>':'')+
+    (cloud.staff?'<div class="staffbox"><span class="eyebrow">Espace propriétaire</span><div class="row"><button class="btn primary" id="goDash">Commandes'+(cloud.newCount?' · '+cloud.newCount+' nouvelle'+(cloud.newCount>1?'s':''):'')+'</button><button class="btn ghost" id="goSell">Gérer les articles</button></div>'+(cloud.owner?'<button class="btn ghost" id="goTeam">Mon équipe · ajouter une gestionnaire</button>':'')+'</div>':'')+
     clubCard()+
     '<div><div class="lbl">Mes commandes</div>'+orders+'</div>'+
     '<details class="acc-edit"><summary>Mes informations</summary><div class="field"><label for="a-name">Nom complet</label><input id="a-name" value="'+esc(p.name||"")+'" autocomplete="name"></div><div class="field"><label for="a-phone">Téléphone</label><input id="a-phone" type="tel" value="'+esc(p.phone||"")+'"></div><p class="note">Identifiant : '+esc(isPhoneId(email)?"+228 "+pretty(email.slice(3,11)):email)+'</p><button class="btn ghost" id="saveProf">Enregistrer</button></details>'+
     '</div><div class="df"><button class="btn ghost" id="logout">Se déconnecter</button></div>',"drawer");
   var gd=$("#goDash"); if(gd) gd.onclick=openDashboard;
   var gs=$("#goSell"); if(gs) gs.onclick=function(){ closeLayer(); tab="items"; openSeller(); };
+  var gt=$("#goTeam"); if(gt) gt.onclick=openTeam;
   $("#saveProf").onclick=function(){ var nm=$("#a-name").value.trim().slice(0,120), ph=$("#a-phone").value.trim().slice(0,30); sb.from("profiles").upsert({id:cloud.user.id,name:nm,phone:ph}).then(function(r){ if(r.error){toast("Enregistrement impossible");return;} cloud.profile.name=nm; cloud.profile.phone=ph; draft.name=nm; draft.phone=ph; accLabel(); toast("Informations enregistrées"); }); };
   $("#logout").onclick=function(){ sb.auth.signOut().then(function(){ closeLayer(); toast("Vous êtes déconnectée"); }); };
 }
@@ -1969,6 +1974,25 @@ function openDashboard(){
   layer.querySelectorAll("[data-df]").forEach(function(b){ b.onclick=function(){ dash.filter=b.dataset.df; layer.querySelectorAll("[data-df]").forEach(function(x){x.setAttribute("aria-pressed",x===b)}); load(); }; });
   $("#dashSell").onclick=function(){ closeLayer(); tab="items"; openSeller(); };
   load(); dash.timer=setInterval(function(){ if(layer.querySelector("#dash")) load(); else clearInterval(dash.timer); },30000);
+}
+
+/* --- équipe : la propriétaire ajoute ou retire des gestionnaires --- */
+function openTeam(){
+  if(!cloud.owner) return;
+  function who(e){ return isPhoneId(e)?"+228 "+pretty(e.slice(3,11)):e; }
+  function draw(list,msg){
+    openLayer('<div class="dh"><h2>Mon équipe</h2><button class="x" data-close aria-label="Fermer">×</button></div><form class="db" id="teamF" novalidate>'+
+      '<p class="note" style="margin:0">Les personnes ajoutées ici peuvent publier des articles et gérer les commandes. Elles se connectent avec leur propre compte (même numéro ou même email que ci-dessous).</p>'+
+      '<div class="adm-list">'+list.map(function(m){ return '<div class="team-it"><div><b>'+esc(who(m.email))+'</b><small class="note">'+(m.role==="owner"?"Propriétaire":"Gestionnaire")+'</small></div>'+(m.role==="owner"?'':'<button type="button" class="btn ghost" data-rm="'+esc(m.email)+'">Retirer</button>')+'</div>'; }).join("")+'</div>'+
+      '<div class="field"><label for="t-id">Ajouter une gestionnaire</label><input id="t-id" placeholder="Numéro (90 12 34 56) ou email" inputmode="email"></div>'+
+      '<p class="err" id="tErr"'+(msg?'':' hidden')+'>'+esc(msg||"")+'</p>'+
+      '<button class="btn primary" type="submit">Ajouter à l\'équipe</button></form>',"drawer");
+    $("#teamF").onsubmit=function(e){ e.preventDefault(); var id=loginId($("#t-id").value); if(!id){ $("#tErr").textContent="Entrez un numéro à 8 chiffres ou un email."; $("#tErr").hidden=false; return; }
+      sb.from("staff").insert({email:id,role:"staff"}).then(function(r){ if(r.error){ load(/duplicate|unique/i.test(r.error.message)?"Cette personne fait déjà partie de l'équipe.":"Ajout impossible pour le moment."); return; } toast("Ajoutée à l'équipe ✦"); load(); }); };
+    layer.querySelectorAll("[data-rm]").forEach(function(b){ var armed=false; b.onclick=function(){ if(!armed){ armed=true; b.textContent="Confirmer"; return; } sb.from("staff").delete().eq("email",b.dataset.rm).then(function(r){ toast(r.error?"Retrait impossible":"Retirée de l'équipe"); load(); }); }; });
+  }
+  function load(msg){ sb.from("staff").select("email,role").then(function(r){ draw((r.data||[]).sort(function(a,b){return (a.role==="owner"?0:1)-(b.role==="owner"?0:1)}),msg); }); }
+  load();
 }
 
 if(sb){
