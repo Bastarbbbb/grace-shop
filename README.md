@@ -22,7 +22,7 @@ Ouvrez `data/shop.json` sur GitHub, cliquez sur le crayon, changez un nom ou un 
 
 1. Dans le dépôt : **Settings → Pages**.
 2. Source : **Deploy from a branch**, branche `main`, dossier `/ (root)`.
-3. L'adresse du site apparaît en haut de la page (par exemple `https://bastarbbbb.github.io/grace-shop/`).
+3. L'adresse du site apparaît en haut de la page (par exemple `https://grace-shop.github.io/`).
 
 GitHub Pages est gratuit pour un dépôt **public**. Pour un dépôt privé, il faut un abonnement GitHub payant.
 

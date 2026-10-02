@@ -19,8 +19,8 @@ import android.webkit.WebViewClient;
 /** Grace Shop : fenêtre plein écran sur la boutique en ligne. */
 public class MainActivity extends Activity {
 
-    private static final String HOME = "https://bastarbbbb.github.io/grace-shop/";
-    private static final String HOST = "bastarbbbb.github.io";
+    private static final String HOME = "https://grace-shop.github.io/";
+    private static final String HOST = "grace-shop.github.io";
     private static final int PICK_FILES = 41;
 
     private WebView web;

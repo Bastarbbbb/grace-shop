@@ -55,4 +55,4 @@ jobs:
           files: grace-shop.apk
           body: |
             Application Android Grace Shop.
-            Lien direct toujours à jour : https://github.com/Bastarbbbb/grace-shop/releases/latest/download/grace-shop.apk
+            Lien direct toujours à jour : https://github.com/grace-shop/grace-shop.github.io/releases/latest/download/grace-shop.apk
