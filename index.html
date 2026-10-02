@@ -920,23 +920,23 @@ function hero3D(){
   var stage=$("#stage"), r;
   try{ r=new THREE.WebGLRenderer({antialias:true,alpha:true}); }catch(e){return}
   r.setPixelRatio(Math.min(window.devicePixelRatio||1,2.5));
-  r.outputEncoding=THREE.sRGBEncoding; r.toneMapping=THREE.ACESFilmicToneMapping; r.toneMappingExposure=1.25;
+  r.outputEncoding=THREE.sRGBEncoding; r.toneMapping=THREE.ACESFilmicToneMapping; r.toneMappingExposure=1.05;
   stage.insertBefore(r.domElement, stage.querySelector(".caption"));
   $("#fallback").hidden=true;
   var scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(34,1,.1,100); cam.position.set(0,.2,9.5);
   scene.environment=makeEnv(r);
-  scene.add(new THREE.HemisphereLight(0xFFE9D0,0x2A1018,.6));
-  var key=new THREE.DirectionalLight(0xFFF1E0,2.2); key.position.set(3,5,6); scene.add(key);
-  var rim=new THREE.PointLight(0xFF4D6D,3.2,30); rim.position.set(-5,2,-3); scene.add(rim);
+  scene.add(new THREE.HemisphereLight(0xFFE9D0,0x2A1018,.35));
+  var key=new THREE.DirectionalLight(0xFFF1E0,1.6); key.position.set(3,5,6); scene.add(key);
+  var rim=new THREE.PointLight(0xFF2A4A,3.4,30); rim.position.set(-5,2,-3); scene.add(rim);
   var rim2=new THREE.PointLight(0xF2D9A6,2.2,30); rim2.position.set(5,1,-2); scene.add(rim2);
-  var fill=new THREE.PointLight(0xD9B26F,1.4,30); fill.position.set(2,-3,5); scene.add(fill);
+  var fill=new THREE.PointLight(0xD9B26F,.9,30); fill.position.set(2,-3,5); scene.add(fill);
 
   var root=new THREE.Group(); scene.add(root);
   var gold=new THREE.MeshStandardMaterial({color:0xE9B65A,metalness:1,roughness:.16,emissive:0x2a1a06,emissiveIntensity:.35});
   // satin rouge : reflets nacrés, vernis léger, éclat rosé sur les bords
-  var satin=new THREE.MeshPhysicalMaterial({color:0xA3001C,roughness:.3,metalness:.05,clearcoat:.7,clearcoatRoughness:.22,side:THREE.DoubleSide,envMapIntensity:1.3});
-  try{ satin.sheen=new THREE.Color(0xFF5A78); }catch(e){}
-  var velvet=new THREE.MeshStandardMaterial({color:0x17121A,roughness:.85,metalness:.05});
+  var satin=new THREE.MeshPhysicalMaterial({color:new THREE.Color(0x8C0A1F).convertSRGBToLinear(),roughness:.3,metalness:0,clearcoat:.35,clearcoatRoughness:.3,side:THREE.DoubleSide,envMapIntensity:.45});
+  try{ satin.sheen=new THREE.Color(0x7A1426).convertSRGBToLinear(); }catch(e){}
+  var velvet=new THREE.MeshStandardMaterial({color:0x050406,roughness:.9,metalness:0,envMapIntensity:.25});
   function lathe(pts,seg){ return new THREE.LatheGeometry(pts.map(function(p){return new THREE.Vector2(p[0],p[1])}),seg); }
 
   // mannequin couture (épaules + cou) habillé par la robe
@@ -968,7 +968,7 @@ function hero3D(){
   var brooch=new THREE.Mesh(new THREE.OctahedronGeometry(.07,0),new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:0,transmission:.6,clearcoat:1,envMapIntensity:3}));
   brooch.position.set(0,.6,.3); root.add(brooch);
   // socle doré
-  var base=new THREE.Mesh(new THREE.CylinderGeometry(1.85,1.95,.06,96),new THREE.MeshStandardMaterial({color:0x1a1418,metalness:.6,roughness:.25})); base.position.y=-2.66; root.add(base);
+  var base=new THREE.Mesh(new THREE.CylinderGeometry(1.85,1.95,.06,96),new THREE.MeshStandardMaterial({color:0x050406,metalness:0,roughness:.5,envMapIntensity:.2})); base.position.y=-2.66; root.add(base);
   var baseRing=new THREE.Mesh(new THREE.TorusGeometry(1.9,.022,12,160),gold); baseRing.rotation.x=Math.PI/2; baseRing.position.y=-2.63; root.add(baseRing);
   root.position.y=.25;
 
@@ -985,7 +985,7 @@ function hero3D(){
   var pts=new THREE.Points(pg,new THREE.PointsMaterial({color:0xF2D9A6,size:.028,transparent:true,opacity:.8,blending:THREE.AdditiveBlending,depthWrite:false}));
   scene.add(pts);
   var petals=[], petG=new THREE.CircleGeometry(.07,10); petG.scale(1,.6,1);
-  var petM=new THREE.MeshStandardMaterial({color:0xC2102E,roughness:.5,side:THREE.DoubleSide,emissive:0x400010,emissiveIntensity:.4});
+  var petM=new THREE.MeshStandardMaterial({color:new THREE.Color(0xB0122E).convertSRGBToLinear(),roughness:.5,side:THREE.DoubleSide,emissive:0x400010,emissiveIntensity:.4});
   for(var q=0;q<18;q++){ var pm=new THREE.Mesh(petG,petM); pm.userData={a:Math.random()*6.28,r:2+Math.random()*1.6,y:Math.random()*6-3,s:.2+Math.random()*.35,w:Math.random()*2}; scene.add(pm); petals.push(pm); }
 
   var tx=0,ty=0,rx=0,ry=0,drag=false,lx=0,spin=0,vel=0;
