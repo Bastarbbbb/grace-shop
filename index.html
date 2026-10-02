@@ -668,7 +668,20 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 .pc-logo{font-family:var(--f-bold);font-weight:700;font-size:1.4rem;letter-spacing:.04em}
 .pc-chip{width:42px;height:30px;border-radius:7px;background:linear-gradient(135deg,#F7E4B8,#B8862B);box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
 .pc-num{font-size:1.3rem;font-weight:800;letter-spacing:.12em}
-.pay-steps{list-style:none;counter-reset:st;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.pay-steps{list-style:none;counter-reset:st;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;position:relative}
+.pay-steps::before{content:"";position:absolute;left:14px;top:20px;bottom:20px;width:2px;background:linear-gradient(var(--gold),rgba(217,178,111,.1))}
+.pay-steps li{background:linear-gradient(180deg,rgba(243,238,230,.035),transparent);border:1px solid var(--line-2);border-radius:18px;padding:14px 14px 14px 52px!important}
+.pay-steps li::before{left:6px!important;top:12px!important;box-shadow:0 0 0 4px var(--bg),0 0 18px rgba(217,178,111,.45)}
+.pay-steps .ussd{background:rgba(0,0,0,.25);padding:9px 10px;gap:8px}.pay-steps .ussd span{font-size:.8rem;white-space:nowrap;color:var(--muted)}.pay-steps .ussd code{white-space:nowrap;font-size:.95rem}.pay-steps li{padding-left:48px!important;padding-right:10px!important}
+.btn.dial{display:inline-flex!important;align-items:center;gap:8px}.btn.dial svg{width:18px;height:18px}
+.codein{text-align:center;font-size:1.25rem!important;font-weight:800;letter-spacing:.18em;padding:14px!important}
+.pc-big{height:178px;transform:perspective(900px) rotateX(8deg)}
+.pc-top,.pc-bot{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.pc-mid{display:flex;flex-direction:column;position:relative;z-index:1}
+.pc-mid b{font-family:var(--f-bold);font-size:2rem;line-height:1.1}
+.pc-lbl{font-size:.68rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;opacity:.75}
+.pc-bot span{display:flex;flex-direction:column;font-weight:800;letter-spacing:.06em}
+.pc-bot small{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;opacity:.7}
 .pay-steps li{counter-increment:st;position:relative;padding-left:44px;display:flex;flex-direction:column;gap:8px}
 .pay-steps li::before{content:counter(st);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--gold-grad);color:var(--gold-ink)}
 .pay-steps a.btn{align-self:flex-start;padding:11px 18px}
@@ -1548,14 +1561,15 @@ function showPay(o, err){
   }
   // Paiement guidé (sans compte marchand) : on ouvre le menu, on copie les infos, la cliente déclare son code.
   var num=o.payKind==="flooz"?S.flooz:S.tmoney, ussd=o.payKind==="flooz"?"*155#":"*145#";
-  openLayer(head+'<form class="db" id="payF" novalidate>'+stepsHTML(1)+amount+
+  openLayer(head+'<form class="db" id="payF" novalidate>'+stepsHTML(1)+
+    '<div class="pay-card pc-'+(o.payKind==="flooz"?"flooz":"tmoney")+' pc-big"><div class="pc-top"><span class="pc-logo">'+netName+'</span><span class="pc-chip"></span></div><div class="pc-mid"><span class="pc-lbl">Montant à envoyer</span><b class="num">'+fcfa(o.total)+'</b></div><div class="pc-bot"><span><small>À</small>'+esc(S.shopName)+'</span><span class="num">'+esc(pretty(num))+'</span></div></div>'+
     '<ol class="pay-steps">'+
-      '<li><b>Ouvrez '+netName+'</b><a class="btn primary" href="tel:'+encodeURIComponent(ussd)+'">Composer '+ussd+'</a></li>'+
-      '<li><b>Choisissez « Transfert » et envoyez</b>'+
+      '<li><b>Ouvrez '+netName+' sur ce téléphone</b><a class="btn primary dial" href="tel:'+encodeURIComponent(ussd)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/></svg>Composer '+ussd+'</a></li>'+
+      '<li><b>Choisissez « Transfert d\'argent » et envoyez</b>'+
         '<div class="ussd"><span>Au numéro</span><code class="num">'+esc(pretty(num))+'</code>'+copyBtn(num,"le numéro")+'</div>'+
         '<div class="ussd"><span>Montant</span><code class="num">'+fcfa(o.total)+'</code>'+copyBtn(String(Math.round(o.total)),"le montant")+'</div>'+
         '<div class="ussd"><span>Motif</span><code>'+esc(o.ref)+'</code>'+copyBtn(o.ref,"le motif")+'</div></li>'+
-      '<li><b>Entrez le code reçu par SMS</b><div class="field"><label class="sr" for="p-code">Code de la transaction</label><input id="p-code" placeholder="Ex. 1234567890" autocomplete="one-time-code"></div></li>'+
+      '<li><b>Entrez le code de transaction reçu par SMS</b><div class="field"><label class="sr" for="p-code">Code de la transaction</label><input id="p-code" class="codein" placeholder="Ex. 1234567890" autocomplete="one-time-code" inputmode="text"></div></li>'+
     '</ol>'+
     '<p class="err" id="payErr" hidden></p>'+
     '<button class="btn primary big" id="payGo" type="submit">J\'ai payé ✓</button>'+
