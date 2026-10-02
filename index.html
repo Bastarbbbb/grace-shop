@@ -633,6 +633,95 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 .team-it{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line-2);border-radius:14px;padding:10px 12px}
 .team-it div{display:flex;flex-direction:column}
 .team-it .btn{padding:8px 14px;font-size:.8rem}
+
+/* ===== paiement & confirmation ===== */
+.db>*{flex-shrink:0}
+.btn.big{padding:17px 24px;font-size:1.02rem}
+.pico{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-family:var(--f-bold);font-weight:700;font-size:1rem;background:var(--bg2);border:1px solid var(--line);color:var(--gold-hi)}
+.pico-tmoney{background:linear-gradient(135deg,#FFD84D,#F2A900);color:#1b1400;border:0}
+.pico-flooz{background:linear-gradient(135deg,#2D7BFF,#0047B3);color:#fff;border:0}
+.choice label{align-items:center}
+.paychip{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:6px 11px;border:1px solid var(--line-2);color:var(--muted);white-space:nowrap}
+.paychip.ok{color:var(--ok);border-color:rgba(127,209,168,.5);background:rgba(127,209,168,.08)}
+.paychip.ok::before{content:"✓"}
+.paychip.wait{color:#FFC27A;border-color:rgba(255,194,122,.45);background:rgba(255,194,122,.07)}
+.paychip.bad{color:var(--danger);border-color:rgba(240,138,138,.45)}
+.paidbtn{padding:10px 14px;font-size:.84rem;border-color:rgba(127,209,168,.5);color:var(--ok)}
+.cpy{flex:none;border:1px solid var(--line);background:transparent;color:var(--gold-hi);border-radius:999px;padding:6px 12px;font-size:.74rem;font-weight:700}
+.ussd{gap:10px}.ussd code{margin-left:auto}
+/* attente animée */
+.cf-wait{align-items:center;justify-content:center;text-align:center;gap:14px}
+.cf-wait h2{font-family:var(--f-display);font-size:1.9rem;margin:6px 0 0}
+.cf-orb{position:relative;width:110px;height:110px}
+.cf-orb i{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:var(--gold-hi);animation:spin 1.1s linear infinite}
+.cf-orb i:nth-child(2){inset:14px;border-top-color:var(--gold);animation-duration:1.6s;animation-direction:reverse}
+.cf-orb i:nth-child(3){inset:30px;background:radial-gradient(circle,rgba(242,217,166,.55),transparent 70%);border:0;animation:pulse2 1.6s ease-in-out infinite}
+@keyframes pulse2{50%{transform:scale(.7);opacity:.5}}
+/* montant + carte 3D */
+.pay-amt{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:6px 0}
+.pay-amt b{font-family:var(--f-bold);font-size:2.6rem;line-height:1.1}
+.pay-card{position:relative;height:150px;border-radius:20px;padding:18px 20px;overflow:hidden;color:#fff;display:flex;flex-direction:column;justify-content:space-between;transform:perspective(800px) rotateX(10deg);transform-origin:50% 100%;box-shadow:0 30px 50px -25px rgba(0,0,0,.9);animation:cardIn .8s cubic-bezier(.2,.7,.2,1)}
+@keyframes cardIn{from{transform:perspective(800px) rotateX(55deg) translateY(30px);opacity:0}}
+.pay-card::after{content:"";position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);animation:sweep 3.6s ease-in-out infinite}
+.pc-tmoney{background:radial-gradient(120% 120% at 100% 0%,#FFE680,transparent 50%),linear-gradient(135deg,#F2A900,#7A4B00);color:#1b1400}
+.pc-flooz{background:radial-gradient(120% 120% at 100% 0%,#7FB0FF,transparent 50%),linear-gradient(135deg,#0B5FFF,#001F66)}
+.pc-logo{font-family:var(--f-bold);font-weight:700;font-size:1.4rem;letter-spacing:.04em}
+.pc-chip{width:42px;height:30px;border-radius:7px;background:linear-gradient(135deg,#F7E4B8,#B8862B);box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+.pc-num{font-size:1.3rem;font-weight:800;letter-spacing:.12em}
+.pay-steps{list-style:none;counter-reset:st;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.pay-steps li{counter-increment:st;position:relative;padding-left:44px;display:flex;flex-direction:column;gap:8px}
+.pay-steps li::before{content:counter(st);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--gold-grad);color:var(--gold-ink)}
+.pay-steps a.btn{align-self:flex-start;padding:11px 18px}
+/* téléphone 3D */
+.phone3d{width:150px;height:250px;border-radius:30px;padding:10px;background:linear-gradient(145deg,#2a2530,#0c0a0e);box-shadow:0 0 0 1px rgba(242,217,166,.25),0 40px 60px -20px rgba(0,0,0,.9),0 0 60px -10px rgba(217,178,111,.35);transform:perspective(700px) rotateY(-18deg) rotateX(8deg);animation:phFloat 4s ease-in-out infinite}
+@keyframes phFloat{50%{transform:perspective(700px) rotateY(14deg) rotateX(4deg) translateY(-8px)}}
+.ph-screen{height:100%;border-radius:22px;background:radial-gradient(120% 80% at 50% 0%,rgba(217,178,111,.25),transparent 60%),#141118;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px;text-align:center}
+.ph-net{font-size:.7rem;font-weight:800;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.ph-screen b{font-size:1rem;white-space:nowrap}
+.ph-pin{letter-spacing:.3em;color:var(--gold-hi);animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.ph-ok{margin-top:6px;font-size:.72rem;font-weight:800;padding:6px 14px;border-radius:999px;background:var(--gold-grad);color:var(--gold-ink);animation:pulse 2s infinite}
+.pw-bar{width:100%;max-width:280px;height:4px;border-radius:999px;background:rgba(243,238,230,.08);overflow:hidden}
+.pw-bar i{display:block;height:100%;width:35%;border-radius:inherit;background:var(--gold-grad);animation:pwb 1.6s ease-in-out infinite}
+@keyframes pwb{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}
+/* confirmation */
+.cf{gap:16px}
+.cf-hero{position:relative;height:150px;display:grid;place-items:center;margin-top:-6px}
+.cf-fx{position:absolute;inset:-30px -22px;width:calc(100% + 44px);height:calc(100% + 60px);pointer-events:none}
+.cf-ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,rgba(255,244,214,.35),transparent 55%),radial-gradient(circle,#2a2016,#120e0a 70%);box-shadow:0 0 0 1px rgba(242,217,166,.45),0 0 0 10px rgba(217,178,111,.06),0 0 80px -6px rgba(217,178,111,.55),inset 0 -10px 30px rgba(0,0,0,.6);animation:ringIn .9s cubic-bezier(.2,1.4,.3,1) both}
+@keyframes ringIn{from{transform:scale(.3) rotate(-90deg);opacity:0}}
+.cf-ring svg{width:62px;height:62px;fill:none;stroke:url(#lg-gold);stroke:var(--gold-hi);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cf-ring circle{stroke-dasharray:151;stroke-dashoffset:151;animation:draw 1s .3s forwards;opacity:.5}
+.cf-ring path{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s .9s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.cf-ring.paid{box-shadow:0 0 0 1px rgba(127,209,168,.5),0 0 0 10px rgba(127,209,168,.06),0 0 80px -6px rgba(127,209,168,.45),inset 0 -10px 30px rgba(0,0,0,.6)}
+.cf-ring.paid svg{stroke:var(--ok)}
+.cf-title{font-family:var(--f-display);font-weight:600;font-size:2.2rem;text-align:center;margin:0;line-height:1.05}
+.cf-sub{text-align:center;color:var(--muted);margin:-6px 0 0}
+.cf-ref{display:flex;align-items:center;justify-content:center;gap:12px;border:1px dashed var(--line);border-radius:16px;padding:12px 14px;background:rgba(217,178,111,.04)}
+.cf-ref b{font-family:var(--f-bold);font-size:1.5rem;letter-spacing:.12em}
+.cf-box{border:1px solid var(--line-2);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(180deg,rgba(243,238,230,.03),transparent)}
+.cf-items{display:flex;flex-direction:column;gap:10px}
+.cf-it{display:flex;align-items:center;gap:12px}
+.cf-th{width:48px;height:58px;flex:none;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--line-2)}
+.cf-th>*{width:100%;height:100%;object-fit:cover;display:block}
+.cf-nm{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.3}
+.cf-nm b{font-size:.9rem;font-weight:600}.cf-nm small{color:var(--muted);font-size:.76rem}
+.cf-sum{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line-2);padding-top:10px}
+.cf-sum div{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem}
+.cf-sum .tot{color:var(--ink);font-size:1.05rem}.cf-sum .tot b{color:var(--gold-hi)}
+.cf-box .paychip{align-self:flex-start}
+.stepper{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.stepper span{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.stepper i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-size:.7rem}
+.stepper span.on{color:var(--gold-hi)}.stepper span.on i{background:var(--gold-grad);color:var(--gold-ink);border:0;box-shadow:0 0 16px rgba(217,178,111,.5)}
+.stepper span.done{color:var(--ink)}.stepper span.done i{background:rgba(127,209,168,.15);border-color:rgba(127,209,168,.5);color:var(--ok)}
+.stepper b{flex:1;height:1px;background:var(--line);min-width:8px}
+.df .row .btn{font-size:.9rem;padding-inline:14px}
+.cf-info{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cf-info>div{border:1px solid var(--line-2);border-radius:16px;padding:12px 14px}
+.cf-info p{margin:6px 0 0;font-size:.88rem;line-height:1.45}
+@media (max-width:400px){.cf-info{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none;filter:none}}
 </style>
 
@@ -1067,7 +1156,7 @@ function applyShop(){
   $("#footWa").textContent = S.whatsapp ? "WhatsApp : +228 "+pretty(S.whatsapp) : "";
   $("#footCity").textContent = (S.city||"")+", Togo";
   $("#copy").textContent = "© 2026 "+name;
-  var fl=!!(S.flooz||S.paygate); $("#floozChip").hidden=!fl; $("#payPillar").textContent=fl?"T-Money · Flooz":"Paiement T-Money";
+  var fl=!!(S.flooz||(cloud&&cloud.autopay)); $("#floozChip").hidden=!fl; $("#payPillar").textContent=fl?"T-Money · Flooz":"Paiement T-Money";
   var fab=$("#wafab"); fab.hidden=!S.whatsapp; if(S.whatsapp) fab.href=waLink("Bonjour "+name+", j'aimerais un conseil.");
   var items=["<b>Bijouterie</b> : bracelets, chaînes, bagues & montres","<b>Vidéos</b> : découvrez nos pièces portées","<b>Livraison</b> à "+esc(S.city)+" en 24–48 h","Paiement <b>T-Money</b>"+(S.flooz?" & <b>Flooz</b>":"")+" ou à la livraison","Réservez maintenant, payez plus tard"];
   $("#announce").innerHTML = items.concat(items).map(function(t){return "<span>✦ "+t+"</span>"}).join("");
@@ -1328,17 +1417,17 @@ function freeBar(){
 /* ---------- commande ---------- */
 var draft = store.get("grace-client",{name:"",phone:"",area:"",mode:"livraison",pay:"reserve"});
 function payOptions(){
-  var o=[{v:"reserve",t:"Réserver, payer à la réception",s:"Vos articles sont gardés 48 h"}];
-  if(S.paygate) o.push({v:"auto",t:"Paiement automatique",s:"T-Money ou Flooz, confirmé instantanément",pill:"Rapide"});
-  if(S.tmoney) o.push({v:"tmoney",t:"Payer moi-même · T-Money",s:"Depuis votre téléphone Togocom"});
-  if(S.flooz) o.push({v:"flooz",t:"Payer moi-même · Flooz",s:"Depuis votre téléphone Moov Africa"});
+  var auto=!!(cloud&&cloud.autopay);
+  var o=[{v:"reserve",t:"Payer à la réception",s:"Espèces ou mobile money, à la livraison ou en boutique",ic:"✦"}];
+  if(S.tmoney||auto) o.push({v:"tmoney",t:"T-Money",s:auto?"Payez dans l'app : validez avec votre code secret":"Payez maintenant depuis votre téléphone",pill:auto?"Instantané":"",ic:"T"});
+  if(S.flooz||auto) o.push({v:"flooz",t:"Flooz",s:auto?"Payez dans l'app : validez avec votre code secret":"Payez maintenant depuis votre téléphone",pill:auto?"Instantané":"",ic:"F"});
   return o;
 }
 function openCheckout(){
   var d=draft, opts=payOptions();
   if(!opts.some(function(o){return o.v===d.pay})) d.pay="reserve";
   var fee=d.mode==="livraison"?deliveryFee():0, promo=promoOf(d.code), disc=promo?Math.round(subtotal()*promo.pct/100):0, total=subtotal()-disc+fee;
-  openLayer('<div class="dh"><h2>Finaliser</h2><button class="x" data-close aria-label="Fermer">×</button></div><form class="db" id="co" novalidate>'+
+  openLayer('<div class="dh"><h2>Finaliser</h2><button class="x" data-close aria-label="Fermer">×</button></div><form class="db" id="co" novalidate>'+stepsHTML(0)+
     '<div class="field"><label for="c-name">Nom complet</label><input id="c-name" autocomplete="name" value="'+esc(d.name)+'"></div>'+
     '<div class="two"><div class="field"><label for="c-phone">Téléphone</label><input id="c-phone" type="tel" inputmode="tel" placeholder="90 12 34 56" value="'+esc(d.phone)+'"></div>'+
     '</div>'+
@@ -1347,10 +1436,10 @@ function openCheckout(){
     '<div><div class="lbl">Réception</div><div class="choice">'+
       '<label><input type="radio" name="mode" value="livraison" '+(d.mode==="livraison"?"checked":"")+'><span><b>Livraison à domicile</b><small>'+(d.zone!=null?(deliveryFee()?fcfa(deliveryFee()):"Offerte"):"Selon votre quartier")+' · sous 24 à 48 h</small></span></label>'+
       '<label><input type="radio" name="mode" value="retrait" '+(d.mode==="retrait"?"checked":"")+'><span><b>Retrait en boutique</b><small>Gratuit</small></span></label></div></div>'+
-    '<div><div class="lbl">Paiement</div><div class="choice">'+opts.map(function(o){return '<label><input type="radio" name="pay" value="'+o.v+'" '+(d.pay===o.v?"checked":"")+'><span><b>'+o.t+(o.pill?'<span class="pill">'+o.pill+'</span>':'')+'</b><small>'+o.s+'</small></span></label>'}).join("")+'</div></div>'+
+    '<div><div class="lbl">Paiement</div><div class="choice">'+opts.map(function(o){return '<label><input type="radio" name="pay" value="'+o.v+'" '+(d.pay===o.v?"checked":"")+'><span class="pico pico-'+o.v+'">'+o.ic+'</span><span><b>'+o.t+(o.pill?'<span class="pill">'+o.pill+'</span>':'')+'</b><small>'+o.s+'</small></span></label>'}).join("")+'</div></div>'+
     '<div><div class="lbl">Code promo</div><div class="promo"><input id="c-code" value="'+esc(d.code||"")+'" placeholder="Ex. GRACE10" autocapitalize="characters" aria-label="Code promo"><button type="button" class="btn ghost" id="applyCode">Appliquer</button></div>'+(d.code?(promo?'<p class="ok-t">✦ Code '+esc(promo.code)+' : −'+promo.pct+' % sur vos articles</p>':'<p class="err">Ce code n\'existe pas ou n\'est plus valable.</p>'):'')+'</div>'+
     '<p class="err" id="coErr" hidden></p></form>'+
-    '<div class="df"><div class="tot"><span>Articles</span><span class="num">'+fcfa(subtotal())+'</span></div>'+(disc?'<div class="tot"><span>Réduction '+esc(promo.code)+'</span><span class="num ok-t">−'+fcfa(disc)+'</span></div>':'')+'<div class="tot"><span>Livraison</span><span class="num">'+(fee?fcfa(fee):"Gratuit")+'</span></div><div class="tot big"><span>Total</span><span class="num">'+fcfa(total)+'</span></div><button class="btn primary" id="confirm">'+(d.pay==="reserve"?"Confirmer la réservation":"Valider et payer "+fcfa(total))+'</button></div>',"drawer");
+    '<div class="df"><div class="tot"><span>Articles</span><span class="num">'+fcfa(subtotal())+'</span></div>'+(disc?'<div class="tot"><span>Réduction '+esc(promo.code)+'</span><span class="num ok-t">−'+fcfa(disc)+'</span></div>':'')+'<div class="tot"><span>Livraison</span><span class="num">'+(fee?fcfa(fee):"Gratuit")+'</span></div><div class="tot big"><span>Total</span><span class="num">'+fcfa(total)+'</span></div><button class="btn primary" id="confirm">'+(d.pay==="reserve"?"Confirmer ma commande · "+fcfa(total):"Commander et payer · "+fcfa(total))+'</button></div>',"drawer");
   function read(){ d.name=$("#c-name").value; d.phone=$("#c-phone").value; var ca=$("#c-area"); if(ca) d.area=ca.value; var cz=$("#c-zone"); if(cz) d.zone=cz.value===""?null:+cz.value; var m=layer.querySelector('[name=mode]:checked'); var p=layer.querySelector('[name=pay]:checked'); d.mode=m?m.value:"livraison"; d.pay=p?p.value:"reserve"; store.set("grace-client",d); }
   layer.querySelectorAll("input[type=radio],#c-zone").forEach(function(r){r.onchange=function(){read();openCheckout()}});
   layer.querySelectorAll("#co input:not([type=radio])").forEach(function(r){r.oninput=read});
@@ -1366,42 +1455,141 @@ function openCheckout(){
   };
 }
 function promoOf(code){ code=String(code||"").trim().toUpperCase(); if(!code) return null; return (S.codes||[]).find(function(c){return c.code===code})||null; }
+function stepsHTML(k){ return '<div class="stepper">'+["Livraison","Paiement","Confirmation"].map(function(t,i){return '<span class="'+(i<k?"done":i===k?"on":"")+'"><i>'+(i<k?"✓":i+1)+'</i>'+t+'</span>'}).join('<b></b>')+'</div>'; }
+function randKey(){ var a=new Uint8Array(16); try{ crypto.getRandomValues(a); }catch(e){ for(var i=0;i<16;i++) a[i]=Math.random()*256|0; } return Array.prototype.map.call(a,function(b){return ("0"+b.toString(16)).slice(-2)}).join(""); }
 function showReceipt(total, fee, disc, promo){
-  var d=draft, ref="GS"+Date.now().toString(36).slice(-5).toUpperCase();
-  var lines=cartLines();
-  var payLabel={reserve:"à la réception (réservation)",auto:"paiement automatique",tmoney:"T-Money",flooz:"Flooz"}[d.pay];
-  var msg="Bonjour "+S.shopName+",\nNouvelle commande "+ref+"\n\n"+lines.map(function(x){return "• "+x.p.name+" ("+x.l.size+", "+x.l.color+") x"+x.l.qty+" = "+fcfa(x.p.price*x.l.qty)}).join("\n")+
-    (disc?"\n\nCode promo "+promo.code+" : −"+fcfa(disc):"")+
-    "\n\nLivraison : "+(d.mode==="livraison"?(fee?fcfa(fee):"offerte")+" — "+((zones()[d.zone]||[""])[0])+(d.area?" ("+d.area+")":""):"retrait en boutique")+"\nPoints Grace Club : +"+Math.floor(total/1000)+" (total "+(clubPoints()+Math.floor(total/1000))+")"+"\nTotal : "+fcfa(total)+
-    "\nPaiement : "+payLabel+"\n\nNom : "+d.name+"\nTél : "+d.phone;
-  var payBlock;
-  if(d.pay==="reserve") payBlock='<p style="margin:0">Vos articles sont réservés 48 h. Vous payez à la '+(d.mode==="livraison"?"livraison":"boutique")+'.</p>';
-  else if(d.pay==="auto"){
-    var url="https://paygateglobal.com/v1/page?token="+encodeURIComponent(S.paygate)+"&amount="+Math.round(total)+"&description="+encodeURIComponent("Commande "+ref+" "+S.shopName)+"&identifier="+encodeURIComponent(ref);
-    payBlock='<a class="btn primary" href="'+url+'" target="_blank" rel="noopener">Payer '+fcfa(total)+' maintenant</a><p class="note" style="margin:0">Une page de paiement sécurisée s\'ouvre : choisissez T-Money ou Flooz et validez sur votre téléphone.</p>';
-  } else {
-    var num=d.pay==="tmoney"?S.tmoney:S.flooz, code=d.pay==="tmoney"?"*145#":"*155#";
-    payBlock='<p style="margin:0"><b>Pour payer par '+(d.pay==="tmoney"?"T-Money":"Flooz")+' :</b></p>'+
-      '<div class="ussd"><span>Composez</span><code>'+code+'</code></div>'+
-      '<div class="ussd"><span>Envoyez au</span><code>'+esc(pretty(num))+'</code></div>'+
-      '<div class="ussd"><span>Montant</span><code class="num">'+fcfa(total)+'</code></div>'+
-      '<div class="ussd"><span>Motif</span><code>'+ref+'</code></div>'+
-      '<p class="note" style="margin:0">Gardez le SMS de confirmation : la boutique valide la commande dès réception du paiement.</p>';
+  var d=draft, ref="GS"+Date.now().toString(36).slice(-5).toUpperCase(), key=randKey(), lines=cartLines();
+  var payLabel={reserve:"À la réception",tmoney:"T-Money",flooz:"Flooz"}[d.pay]||"À la réception";
+  var zoneName=d.mode==="livraison"?((zones()[d.zone]||[""])[0]):"";
+  var o={ref:ref,key:key,date:Date.now(),name:d.name,phone:d.phone,mode:d.mode,zone:zoneName,area:d.mode==="livraison"?d.area:"",payKind:d.pay,pay:payLabel,
+    items:lines.map(function(x){return {id:x.p.id,name:x.p.name,size:x.l.size,color:x.l.color,qty:x.l.qty,price:x.p.price}}),
+    subtotal:subtotal(),fee:fee,discount:disc,total:total,promo:promo?promo.code:"",status:"nouvelle",pay_status:"en attente",count:lines.reduce(function(s,x){return s+x.l.qty},0)};
+  state.orders.unshift(o); state.orders=state.orders.slice(0,30); store.set("grace-orders",state.orders); updOrders();
+  state.cart=[]; saveCart();
+  openLayer('<div class="db cf-wait"><div class="cf-orb"><i></i><i></i><i></i></div><h2>Envoi de votre commande…</h2><p class="note">Un instant, nous la transmettons à la boutique.</p></div>',"drawer");
+  cloudOrder(o).then(function(ok){ o.sent=ok; store.set("grace-orders",state.orders); if(o.payKind==="reserve") showDone(o); else showPay(o); });
+}
+function orderMsg(o, extra){
+  return "Bonjour "+S.shopName+",\nCommande "+o.ref+"\n\n"+o.items.map(function(x){return "• "+x.name+" ("+x.size+", "+x.color+") ×"+x.qty+" = "+fcfa(x.price*x.qty)}).join("\n")+
+    (o.discount?"\nCode "+o.promo+" : −"+fcfa(o.discount):"")+"\n\n"+(o.mode==="livraison"?"Livraison : "+(o.fee?fcfa(o.fee):"offerte")+" — "+o.zone+(o.area?" ("+o.area+")":""):"Retrait en boutique")+
+    "\nTotal : "+fcfa(o.total)+"\nPaiement : "+o.pay+(extra?"\n"+extra:"")+"\n\nNom : "+o.name+"\nTél : "+o.phone;
+}
+function fnCall(action, body){
+  return fetch(CFG.url+"/functions/v1/pay?action="+action,{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.key},body:JSON.stringify(body||{})})
+    .then(function(r){ return r.json().catch(function(){return {error:"reponse"}}); });
+}
+function copyBtn(v,label){ return '<button type="button" class="cpy" data-copy="'+esc(v)+'" aria-label="Copier '+esc(label)+'">Copier</button>'; }
+function bindCopy(){ layer.querySelectorAll("[data-copy]").forEach(function(b){ b.onclick=function(){ var v=b.dataset.copy; (navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(function(){ b.textContent="Copié ✓"; toast("Copié : "+v); setTimeout(function(){b.textContent="Copier"},1600); },function(){ toast(v); }); }; }); }
+
+/* --- paiement dans l'application --- */
+function showPay(o, err){
+  var net=o.payKind==="flooz"?"FLOOZ":"TMONEY", netName=net==="FLOOZ"?"Flooz":"T-Money", auto=!!(cloud&&cloud.autopay&&o.sent);
+  var head='<div class="dh"><h2>Paiement '+netName+'</h2><button class="x" data-close aria-label="Fermer">×</button></div>';
+  var amount='<div class="pay-amt"><span class="eyebrow">Montant à payer</span><b class="num gold-t">'+fcfa(o.total)+'</b><span class="note">Commande '+esc(o.ref)+'</span></div>';
+  if(auto){
+    openLayer(head+'<form class="db" id="payF" novalidate>'+stepsHTML(1)+amount+
+      '<div class="pay-card pc-'+net.toLowerCase()+'"><span class="pc-logo">'+netName+'</span><span class="pc-chip"></span><span class="pc-num num" id="pcNum">+228 '+esc(pretty(phoneDigits(o.phone))||"·· ·· ·· ··")+'</span></div>'+
+      '<div class="field"><label for="p-ph">Numéro '+netName+' qui va payer</label><div class="telrow"><span>+228</span><input id="p-ph" type="tel" inputmode="tel" value="'+esc(phoneDigits(o.phone))+'" placeholder="90 12 34 56"></div></div>'+
+      '<p class="note" style="margin:0">Vous allez recevoir une demande de paiement sur ce téléphone : <b>entrez votre code secret '+netName+'</b> pour valider. Rien n\'est prélevé sans votre code.</p>'+
+      '<p class="err" id="payErr"'+(err?'':' hidden')+'>'+esc(err||"")+'</p>'+
+      '<button class="btn primary big" id="payGo" type="submit">Payer '+fcfa(o.total)+'</button>'+
+      '<button type="button" class="lnk" id="payLater" style="align-self:center">Payer plutôt à la réception</button></form>',"drawer");
+    $("#p-ph").oninput=function(){ $("#pcNum").textContent="+228 "+(pretty(phoneDigits(this.value))||"·· ·· ·· ··"); };
+    $("#payLater").onclick=function(){ o.payKind="reserve"; o.pay="À la réception"; showDone(o); };
+    $("#payF").onsubmit=function(e){
+      e.preventDefault(); var ph=phoneDigits($("#p-ph").value);
+      if(ph.length!==8){ $("#payErr").textContent="Entrez le numéro à 8 chiffres, par exemple 90 12 34 56."; $("#payErr").hidden=false; return; }
+      var b=$("#payGo"); b.disabled=true; b.textContent="Connexion à "+netName+"…";
+      fnCall("start",{ref:o.ref,key:o.key,phone:ph,network:net}).then(function(r){
+        if(r&&r.pay_status==="payé"){ o.pay_status="payé"; return showDone(o); }
+        if(!r||r.error){ b.disabled=false; b.textContent="Payer "+fcfa(o.total); $("#payErr").textContent=r&&r.error==="numero_invalide"?"Ce numéro n'est pas valide.":"Le paiement n'a pas pu démarrer. Vérifiez le numéro et réessayez."; $("#payErr").hidden=false; return; }
+        if(r.amount) o.total=r.amount;
+        payWait(o, netName, ph);
+      }).catch(function(){ b.disabled=false; b.textContent="Payer "+fcfa(o.total); $("#payErr").textContent="Pas de connexion. Réessayez."; $("#payErr").hidden=false; });
+    };
+    return;
   }
-  var wa = waLink(msg);
-  state.orders.unshift({ref:ref,date:Date.now(),total:total,count:lines.reduce(function(s,x){return s+x.l.qty},0),items:lines.map(function(x){return {id:x.p.id,name:x.p.name,size:x.l.size,color:x.l.color,qty:x.l.qty}}),pay:payLabel,mode:d.mode});
-  state.orders=state.orders.slice(0,30); store.set("grace-orders",state.orders); updOrders();
-  cloudOrder({ref:ref,name:d.name,phone:d.phone,mode:d.mode,zone:d.mode==="livraison"?((zones()[d.zone]||[""])[0]):"",area:d.mode==="livraison"?d.area:"",pay:payLabel,items:lines.map(function(x){return {id:x.p.id,name:x.p.name,size:x.l.size,color:x.l.color,qty:x.l.qty,price:x.p.price}}),subtotal:subtotal(),fee:fee,discount:disc,total:total,promo:promo?promo.code:""});
-  openLayer('<div class="dh"><h2>Merci '+esc(d.name.split(" ")[0])+' !</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db">'+
-    '<div class="receipt"><span class="lbl" style="margin:0">Référence de commande</span><span class="ref gold-t">'+ref+'</span><span class="num">'+fcfa(total)+' · '+lines.reduce(function(s,x){return s+x.l.qty},0)+' article(s)</span></div>'+
-    payBlock+
-    '<div><div class="lbl">Envoyez la commande à la boutique</div>'+
-    (wa?'<a class="btn light" href="'+wa+'" target="_blank" rel="noopener">Envoyer sur WhatsApp</a><p class="note">Le bouton ne s\'ouvre pas ? Copiez le message et envoyez-le au +228 '+esc(pretty(S.whatsapp))+'.</p>':'<p class="note">Copiez ce message et envoyez-le à la boutique.</p>')+
-    '<pre class="msg" id="msg">'+esc(msg)+'</pre><button class="btn ghost" id="copyMsg" style="width:100%;margin-top:8px">Copier le message</button></div>'+
-    '</div><div class="df"><button class="btn primary" id="done">Continuer mes achats</button></div>',"drawer");
-  $("#copyMsg").onclick=function(){ try{ navigator.clipboard.writeText(msg).then(function(){toast("Message copié")},selectMsg); }catch(e){ selectMsg(); } };
-  function selectMsg(){var r=document.createRange();r.selectNodeContents($("#msg"));var s=getSelection();s.removeAllRanges();s.addRange(r);toast("Message sélectionné, copiez-le")}
-  $("#done").onclick=function(){state.cart=[];saveCart();closeLayer()};
+  // Paiement guidé (sans compte marchand) : on ouvre le menu, on copie les infos, la cliente déclare son code.
+  var num=o.payKind==="flooz"?S.flooz:S.tmoney, ussd=o.payKind==="flooz"?"*155#":"*145#";
+  openLayer(head+'<form class="db" id="payF" novalidate>'+stepsHTML(1)+amount+
+    '<ol class="pay-steps">'+
+      '<li><b>Ouvrez '+netName+'</b><a class="btn primary" href="tel:'+encodeURIComponent(ussd)+'">Composer '+ussd+'</a></li>'+
+      '<li><b>Choisissez « Transfert » et envoyez</b>'+
+        '<div class="ussd"><span>Au numéro</span><code class="num">'+esc(pretty(num))+'</code>'+copyBtn(num,"le numéro")+'</div>'+
+        '<div class="ussd"><span>Montant</span><code class="num">'+fcfa(o.total)+'</code>'+copyBtn(String(Math.round(o.total)),"le montant")+'</div>'+
+        '<div class="ussd"><span>Motif</span><code>'+esc(o.ref)+'</code>'+copyBtn(o.ref,"le motif")+'</div></li>'+
+      '<li><b>Entrez le code reçu par SMS</b><div class="field"><label class="sr" for="p-code">Code de la transaction</label><input id="p-code" placeholder="Ex. 1234567890" autocomplete="one-time-code"></div></li>'+
+    '</ol>'+
+    '<p class="err" id="payErr" hidden></p>'+
+    '<button class="btn primary big" id="payGo" type="submit">J\'ai payé ✓</button>'+
+    '<button type="button" class="lnk" id="payLater" style="align-self:center">Payer plutôt à la réception</button></form>',"drawer");
+  bindCopy();
+  $("#payLater").onclick=function(){ o.payKind="reserve"; o.pay="À la réception"; showDone(o); };
+  $("#payF").onsubmit=function(e){
+    e.preventDefault(); var code=$("#p-code").value.trim();
+    if(code.length<4){ $("#payErr").textContent="Entrez le code de transaction reçu par SMS (au moins 4 caractères)."; $("#payErr").hidden=false; return; }
+    o.pay_ref=code; o.pay_status="déclaré";
+    if(sb&&o.sent){ sb.rpc("declare_payment",{p_ref:o.ref,p_key:o.key,p_code:code,p_method:netName}).then(function(){ store.set("grace-orders",state.orders); showDone(o); }); }
+    else { store.set("grace-orders",state.orders); showDone(o); }
+  };
+}
+function payWait(o, netName, ph){
+  openLayer('<div class="db cf-wait"><div class="phone3d"><div class="ph-screen"><span class="ph-net">'+netName+'</span><b class="num">'+fcfa(o.total)+'</b><span class="ph-pin">• • • •</span><span class="ph-ok">Valider</span></div></div>'+
+    '<h2>Validez sur votre téléphone</h2><p class="note">Une demande de paiement a été envoyée au <b>+228 '+esc(pretty(ph))+'</b>. Entrez votre code secret '+netName+' pour confirmer.</p>'+
+    '<div class="pw-bar"><i></i></div><p class="note" id="pwT">En attente de votre validation…</p><button class="btn ghost" id="pwCancel">Changer de numéro</button></div>',"drawer");
+  var n=0, stop=false;
+  $("#pwCancel").onclick=function(){ stop=true; showPay(o); };
+  (function poll(){
+    if(stop||!layer.querySelector(".pw-bar")) return;
+    fnCall("check",{ref:o.ref,key:o.key}).then(function(r){
+      if(stop) return;
+      if(r&&r.pay_status==="payé"){ o.pay_status="payé"; o.status="payée"; store.set("grace-orders",state.orders); return showDone(o); }
+      if(r&&r.pay_status==="échoué"){ return showPay(o,"Le paiement a été refusé ou a expiré. Vous pouvez réessayer."); }
+      if(++n>45){ return showPay(o,"Pas de validation reçue. Réessayez, ou choisissez de payer à la réception."); }
+      var t=$("#pwT"); if(t&&n===8) t.textContent="Toujours en attente… vérifiez la notification sur votre téléphone.";
+      setTimeout(poll,4000);
+    }).catch(function(){ setTimeout(poll,5000); });
+  })();
+}
+
+/* --- confirmation --- */
+function showDone(o){
+  var paid=o.pay_status==="payé", declared=o.pay_status==="déclaré";
+  var first=(o.name||"").split(" ")[0];
+  var title=paid?"Paiement reçu":"Commande confirmée";
+  var sub=o.sent===false?"Il reste une étape : envoyez-la à la boutique sur WhatsApp pour la confirmer.":
+    paid?"Merci "+esc(first)+" ! Votre paiement est validé et la boutique prépare déjà votre commande.":
+    declared?"Merci "+esc(first)+" ! La boutique vérifie votre paiement et vous confirme très vite.":
+    "Merci "+esc(first)+" ! La boutique a bien reçu votre commande et vous contacte pour la "+(o.mode==="livraison"?"livraison":"remise")+".";
+  var status=paid?"payée":"nouvelle";
+  var payChip=paid?'<span class="paychip ok">Payé · '+esc(o.pay)+'</span>':declared?'<span class="paychip wait">Paiement en vérification</span>':'<span class="paychip">'+esc(o.payKind==="reserve"?"À payer à la réception":"Paiement en attente")+'</span>';
+  var items=o.items.map(function(it){ var p=DATA.products.find(function(x){return x.id===it.id}); return '<div class="cf-it"><span class="cf-th">'+(p?thumbOf(p):"")+'</span><span class="cf-nm"><b>'+esc(it.name)+'</b><small>'+esc(it.size)+' · '+esc(it.color)+' · ×'+it.qty+'</small></span><span class="num">'+fcfa(it.price*it.qty)+'</span></div>'; }).join("");
+  var wa=waLink(orderMsg(o, o.pay_ref?"Code de paiement : "+o.pay_ref:""));
+  openLayer('<div class="dh"><span></span><button class="x" data-close aria-label="Fermer">×</button></div><div class="db cf">'+stepsHTML(3)+
+    '<div class="cf-hero"><canvas class="cf-fx"></canvas><div class="cf-ring'+(paid?' paid':'')+'"><svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg></div></div>'+
+    '<h2 class="cf-title">'+title+'</h2><p class="cf-sub">'+sub+'</p>'+
+    '<div class="cf-ref"><span class="eyebrow">Référence</span><b class="gold-t">'+esc(o.ref)+'</b>'+copyBtn(o.ref,"la référence")+'</div>'+
+    trackHTML(status)+
+    '<div class="cf-box"><div class="cf-items">'+items+'</div>'+
+      '<div class="cf-sum"><div><span>Articles</span><span class="num">'+fcfa(o.subtotal)+'</span></div>'+(o.discount?'<div><span>Réduction '+esc(o.promo)+'</span><span class="num ok-t">−'+fcfa(o.discount)+'</span></div>':'')+
+      '<div><span>'+(o.mode==="livraison"?"Livraison":"Retrait en boutique")+'</span><span class="num">'+(o.fee?fcfa(o.fee):"Offert")+'</span></div>'+
+      '<div class="tot"><span>Total</span><b class="num">'+fcfa(o.total)+'</b></div></div>'+payChip+'</div>'+
+    '<div class="cf-info"><div><span class="eyebrow">'+(o.mode==="livraison"?"Livraison":"Retrait")+'</span><p>'+(o.mode==="livraison"?esc(o.zone)+(o.area?"<br>"+esc(o.area):"")+'<br><span class="note">Sous 24 à 48 h · la boutique vous appelle avant de passer</span>':esc(S.city)+'<br><span class="note">La boutique vous prévient quand c\'est prêt</span>')+'</p></div>'+
+      '<div><span class="eyebrow">Contact</span><p>'+esc(o.name)+'<br>+228 '+esc(pretty(phoneDigits(o.phone)))+'</p></div></div>'+
+    (o.sent===false&&wa?'<a class="btn light big" href="'+wa+'" target="_blank" rel="noopener">Envoyer la commande sur WhatsApp</a>':'')+
+    '</div><div class="df"><div class="row"><button class="btn ghost" id="cfTrack">Suivre ma commande</button><button class="btn primary" id="cfGo">Continuer</button></div>'+
+    (o.sent!==false&&wa?'<a class="lnk" style="text-align:center" href="'+waLink("Bonjour "+S.shopName+", c'est à propos de ma commande "+o.ref+".")+'" target="_blank" rel="noopener">Une question ? Écrire à la boutique</a>':'')+'</div>',"drawer");
+  bindCopy();
+  $("#cfGo").onclick=closeLayer;
+  $("#cfTrack").onclick=function(){ openOrders(); };
+  confetti(layer.querySelector(".cf-fx"));
+}
+function thumbOf(p){ var ph=photos(p); if(ph.length) return '<img src="'+srcOf(ph[0])+'" alt="">'; var k="-cf"+Math.random().toString(36).slice(2,7); return visual(p).replace(/id="([^"]+)"/g,'id="$1'+k+'"').replace(/url\(#([^)]+)\)/g,'url(#$1'+k+')').replace(/href="#([^"]+)"/g,function(m,id){ return /^(logo|i-|lg-)/.test(id)?m:'href="#'+id+k+'"'; }); }
+function confetti(c){
+  if(!c||reduce) return; var ctx=c.getContext("2d"), dpr=Math.min(2,devicePixelRatio||1), W=c.offsetWidth, H=c.offsetHeight; c.width=W*dpr; c.height=H*dpr; ctx.scale(dpr,dpr);
+  var cols=["#F2D9A6","#D9B26F","#A97C3A","#FFF4D6","#5B2A4A"], ps=[];
+  for(var i=0;i<90;i++){ var a=Math.random()*Math.PI*2, v=2+Math.random()*5; ps.push({x:W/2,y:H/2,vx:Math.cos(a)*v,vy:Math.sin(a)*v-2.5,r:2+Math.random()*4,c:cols[i%cols.length],rot:Math.random()*6,vr:(Math.random()-.5)*.3,life:0}); }
+  var t=0;(function f(){ t++; ctx.clearRect(0,0,W,H); ps.forEach(function(p){ p.vy+=.09; p.vx*=.99; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; ctx.save(); ctx.globalAlpha=Math.max(0,1-t/120); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillStyle=p.c; ctx.fillRect(-p.r,-p.r/2.5,p.r*2,p.r/1.25); ctx.restore(); }); if(t<120) requestAnimationFrame(f); })();
 }
 
 /* ---------- vente flash ---------- */
@@ -1425,7 +1613,7 @@ function renderFlash(){
 }
 
 /* ---------- Grace Club (fidélité) ---------- */
-function clubPoints(){ if(cloud&&cloud.user) return cloudPoints(); return state.orders.reduce(function(s,o){return s+Math.floor((o.total||0)/1000)},0); }
+function clubPoints(){ if(cloud&&cloud.user) return cloudPoints(); if(sb) return state.orders.filter(function(o){return o.pay_status==="payé"||o.status==="payée"||o.status==="livrée"}).reduce(function(s,o){return s+Math.floor((o.total||0)/1000)},0); return state.orders.reduce(function(s,o){return s+Math.floor((o.total||0)/1000)},0); }
 function clubCard(){
   var pts=clubPoints(), tiers=[["Perle",0],["Or",50],["Diamant",150]], t=tiers[0], nx=null;
   tiers.forEach(function(x,i){ if(pts>=x[1]){ t=x; nx=tiers[i+1]||null; } });
@@ -1439,21 +1627,29 @@ function clubCard(){
 function updOrders(){ var b=$("#ordersBtn"); if(b) b.hidden=!state.orders.length; }
 function openOrders(){
   if(sb&&cloud.user) return openAccount();
-  var fmtD=function(t){ try{ return new Date(t).toLocaleDateString("fr-FR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } };
-  var body = state.orders.length ? state.orders.map(function(o,i){
+  var fmtD=function(t){ try{ return new Date(t).toLocaleDateString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } };
+  function card(o,i){
     var ask=waLink("Bonjour "+S.shopName+", où en est ma commande "+o.ref+" ? Merci.");
-    return '<div class="order"><div class="oh"><span class="ref-s gold-t">'+o.ref+'</span><span class="note">'+fmtD(o.date)+'</span></div>'+
-      '<div class="note">'+o.items.map(function(it){return esc(it.name)+' ('+esc(it.size)+') ×'+it.qty}).join(" · ")+'</div>'+
-      '<div class="oh"><b class="num">'+fcfa(o.total)+'</b><span class="note">'+esc(o.pay)+'</span></div>'+
-      '<div class="row">'+(ask?'<a class="btn ghost" href="'+ask+'" target="_blank" rel="noopener">Suivre sur WhatsApp</a>':'')+'<button class="btn ghost" data-reorder="'+i+'">Commander à nouveau</button></div></div>';
-  }).join("") : '<div class="empty">Vos commandes apparaîtront ici.</div>';
-  body = clubCard()+body;
-  openLayer('<div class="dh"><h2>Mes commandes</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db">'+body+'<p class="note">Cet historique est gardé sur cet appareil.</p></div>',"drawer");
-  layer.querySelectorAll("[data-reorder]").forEach(function(b){b.onclick=function(){
-    var o=state.orders[+b.dataset.reorder], n=0;
-    o.items.forEach(function(it){ if(DATA.products.some(function(p){return p.id===it.id&&p.stock>0})){ state.cart.push({id:it.id,size:it.size,color:it.color,qty:it.qty}); n++; } });
-    saveCart(); if(n) openCart(); else toast("Ces pièces ne sont plus disponibles");
-  }});
+    return '<div class="order" data-oref="'+esc(o.ref)+'"><div class="oh"><span class="ref-s gold-t">'+esc(o.ref)+'</span><span class="stchip st-'+STATUS.indexOf(o.status||"nouvelle")+'">'+esc(STATUS_LBL[o.status||"nouvelle"]||"Nouvelle")+'</span></div>'+
+      '<div class="note">'+fmtD(o.date)+' · '+o.items.map(function(it){return esc(it.name)+' ×'+it.qty}).join(" · ")+'</div>'+
+      '<div class="oh"><b class="num">'+fcfa(o.total)+'</b>'+payChip(o)+'</div>'+trackHTML(o.status||"nouvelle")+
+      '<div class="row">'+(ask?'<a class="btn ghost" href="'+ask+'" target="_blank" rel="noopener">Écrire à la boutique</a>':'')+'<button class="btn ghost" data-reorder="'+i+'">Commander à nouveau</button></div></div>';
+  }
+  function draw(){
+    var body = state.orders.length ? state.orders.map(card).join("") : '<div class="empty">Vos commandes apparaîtront ici.</div>';
+    openLayer('<div class="dh"><h2>Mes commandes</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db">'+clubCard()+body+'<p class="note">'+(sb?'Créez un compte (bouton « Se connecter ») pour retrouver vos commandes sur tous vos appareils.':'Cet historique est gardé sur cet appareil.')+'</p></div>',"drawer");
+    layer.querySelectorAll("[data-reorder]").forEach(function(b){b.onclick=function(){
+      var o=state.orders[+b.dataset.reorder], n=0;
+      o.items.forEach(function(it){ if(DATA.products.some(function(p){return p.id===it.id&&p.stock>0})){ state.cart.push({id:it.id,size:it.size,color:it.color,qty:it.qty}); n++; } });
+      saveCart(); if(n) openCart(); else toast("Ces pièces ne sont plus disponibles");
+    }});
+  }
+  draw();
+  // statut en direct des commandes passées sans compte
+  if(sb){
+    var todo=state.orders.filter(function(o){return o.key}).slice(0,10);
+    Promise.all(todo.map(function(o){ return sb.rpc("order_track",{p_ref:o.ref,p_key:o.key}).then(function(r){ var x=r.data&&r.data[0]; if(x){ o.status=x.status; o.pay_status=x.pay_status; o.pay_method=x.pay_method; o.total=x.total; } }); })).then(function(){ store.set("grace-orders",state.orders); if(layer.querySelector("[data-oref]")) draw(); });
+  }
 }
 
 /* ---------- espace vendeur ---------- */
@@ -1482,7 +1678,7 @@ function prepVideo(file, cb){
 }
 function statusHTML(){
   var st=function(label,on,txt){return '<div class="st"><span>'+label+'</span><em class="'+(on?"on":"off")+'">'+(on?"Actif":txt)+'</em></div>'};
-  return '<div class="status">'+st("Commandes WhatsApp",!!S.whatsapp,"À ajouter")+st("Paiement T-Money manuel",!!S.tmoney,"À ajouter")+(S.flooz?st("Paiement Flooz manuel",true,""):"")+st("Paiement automatique",!!S.paygate,"À activer")+'</div>';
+  return '<div class="status">'+st("Commandes WhatsApp",!!S.whatsapp,"À ajouter")+st("Paiement T-Money manuel",!!S.tmoney,"À ajouter")+(S.flooz?st("Paiement Flooz manuel",true,""):"")+st("Paiement direct dans l'app",!!(cloud&&cloud.autopay),"À activer")+'</div>';
 }
 function openSeller(){
   var pending=Object.keys(BLOBS).length;
@@ -1526,8 +1722,7 @@ function openSeller(){
     body='<form id="sf" class="adm-list" novalidate>'+statusHTML()+
       '<div class="field"><label for="s-wa">Numéro WhatsApp (reçoit les commandes)</label><input id="s-wa" type="tel" value="'+esc(S.whatsapp)+'"></div>'+
       '<div class="two"><div class="field"><label for="s-tm">Numéro T-Money (Togocom)</label><input id="s-tm" type="tel" value="'+esc(S.tmoney)+'"></div><div class="field"><label for="s-fl">Numéro Flooz (Moov Africa)</label><input id="s-fl" type="tel" value="'+esc(S.flooz)+'" placeholder="Facultatif : seulement si vous avez une puce Moov"></div></div>'+
-      '<div class="hint"><h4>Activer le paiement automatique</h4><ol class="steps"><li>Sur <b>paygateglobal.com</b>, créez un compte marchand.</li><li>Envoyez les pièces demandées et attendez la validation.</li><li>Dans votre tableau de bord PayGate, copiez votre <b>clé API</b>.</li><li>Collez-la ci-dessous, touchez <b>Appliquer</b>, puis <b>Publier maintenant</b>.</li></ol>'+
-      '<div class="field"><label for="s-pg">Clé PayGate</label><input id="s-pg" value="'+esc(S.paygate)+'" placeholder="Collez ici votre clé API PayGate"></div></div>'+
+      '<div class="hint"><h4>Paiement direct dans l\'application</h4><p class="note" style="margin:0">Avec un compte marchand <b>PayGate Global</b>, vos clientes paient T-Money ou Flooz sans quitter l\'app : elles valident avec leur code secret et la commande passe « Payée » toute seule. La clé PayGate est rangée sur le serveur, jamais ici. État : <b>'+(cloud&&cloud.autopay?"activé ✓":"pas encore activé")+'</b></p></div>'+
       '<div class="field"><label for="s-url">Lien de votre boutique (pour le partage)</label><input id="s-url" type="url" value="'+esc(S.shopUrl||"")+'" placeholder="Collez le lien obtenu avec « Partager »"></div>'+
       '<div class="two"><div class="field"><label for="s-name">Nom de la boutique</label><input id="s-name" value="'+esc(S.shopName)+'"></div><div class="field"><label for="s-city">Ville</label><input id="s-city" value="'+esc(S.city)+'"></div></div>'+
       '<div class="field"><label for="s-slogan">Slogan</label><input id="s-slogan" value="'+esc(S.slogan)+'"></div>'+
@@ -1635,7 +1830,7 @@ function openSeller(){
   var sf=$("#sf");
   if(sf) sf.onsubmit=function(e){
     e.preventDefault();
-    S.shopName=$("#s-name").value.trim()||S.shopName; S.city=$("#s-city").value.trim()||S.city; S.slogan=$("#s-slogan").value.trim()||S.slogan; S.whatsapp=$("#s-wa").value.trim(); S.tmoney=$("#s-tm").value.trim(); S.flooz=$("#s-fl").value.trim(); S.paygate=$("#s-pg").value.trim(); S.shopUrl=$("#s-url").value.trim(); S.delivery=Math.max(0,+$("#s-del").value||0); S.freeFrom=Math.max(0,+$("#s-free").value||0); S.flashTitle=$("#s-ft").value.trim(); S.flashEnd=$("#s-fe").value;
+    S.shopName=$("#s-name").value.trim()||S.shopName; S.city=$("#s-city").value.trim()||S.city; S.slogan=$("#s-slogan").value.trim()||S.slogan; S.whatsapp=$("#s-wa").value.trim(); S.tmoney=$("#s-tm").value.trim(); S.flooz=$("#s-fl").value.trim(); S.paygate=""; S.shopUrl=$("#s-url").value.trim(); S.delivery=Math.max(0,+$("#s-del").value||0); S.freeFrom=Math.max(0,+$("#s-free").value||0); S.flashTitle=$("#s-ft").value.trim(); S.flashEnd=$("#s-fe").value;
     S.codes=$("#s-codes").value.split(",").map(function(x){var a=x.split("=");var c=(a[0]||"").trim().toUpperCase(),p=Math.round(+a[1]);return c&&p>0&&p<=90?{code:c,pct:p}:null}).filter(Boolean); S.heroText=$("#s-ht").value.trim()||S.heroText;
     var cats=$("#s-cats").value.split(",").map(function(s){return s.trim()}).filter(Boolean); if(cats.length) DATA.categories=cats;
     state.dirty=true; applyShop(); renderGrid(); renderFlash(); renderBanner(); openSeller(); toast("Réglages appliqués");
@@ -1679,7 +1874,7 @@ function publish(){
 }
 function renderBanner(){
   var noPhoto=DATA.products.filter(function(p){return !photos(p).length}).length;
-  var msg = noPhoto ? noPhoto+(noPhoto>1?" articles attendent leur":" article attend sa")+" vraie photo. Ajoutez-les depuis « Mes articles », avec le bouton « Photo »." : (!S.paygate?"Le paiement automatique n'est pas encore activé (facultatif).":"");
+  var msg = noPhoto ? noPhoto+(noPhoto>1?" articles attendent leur":" article attend sa")+" vraie photo. Ajoutez-les depuis « Mes articles », avec le bouton « Photo »." : (!(cloud&&cloud.autopay)?"Le paiement automatique n'est pas encore activé (facultatif).":"");
   $("#ownerBanner").innerHTML = state.canEdit&&msg&&!state.hideBanner ? '<div class="banner"><span><b>Mode vendeur</b> · '+msg+' Seul vous voyez ce message.</span><div class="row"><button class="btn primary" id="goSet">'+(noPhoto?"Ajouter les photos":"Voir les étapes")+'</button><button class="btn ghost" id="hideB">Plus tard</button></div></div>' : "";
   var g=$("#goSet"); if(g) g.onclick=function(){tab=noPhoto?"items":"settings";openSeller()};
   var h=$("#hideB"); if(h) h.onclick=function(){state.hideBanner=true;store.set("grace-hide-banner2",true);renderBanner()};
@@ -1814,7 +2009,7 @@ function onSession(session){
     if(cloud.profile.name&&!draft.name) draft.name=cloud.profile.name;
     if(cloud.profile.phone&&!draft.phone) draft.phone=cloud.profile.phone;
     state.canEdit=cloud.staff; $("#sellerBtn").hidden=!cloud.staff; renderBanner(); renderGrid();
-    if(cloud.staff) refreshNew();
+    if(cloud.staff){ refreshNew(); liveOrders(); }
     accLabel(); updOrders();
   }).catch(function(){ accLabel(); });
 }
@@ -1867,14 +2062,28 @@ function cloudPublish(){
 
 /* --- commande enregistrée en ligne --- */
 function cloudOrder(o){
-  if(!sb) return;
-  var row={ref:o.ref,name:o.name.slice(0,120),phone:o.phone.slice(0,30),mode:o.mode,zone:(o.zone||"").slice(0,120),area:(o.area||"").slice(0,300),pay:(o.pay||"").slice(0,60),items:o.items,subtotal:o.subtotal,fee:o.fee,discount:o.discount,total:Math.round(o.total),promo:o.promo||null};
+  if(!sb) return Promise.resolve(false);
+  var row={ref:o.ref,client_key:o.key,name:String(o.name).slice(0,120),phone:String(o.phone).slice(0,30),mode:o.mode,zone:(o.zone||"").slice(0,120),area:(o.area||"").slice(0,300),pay:(o.pay||"").slice(0,60),pay_method:o.payKind==="reserve"?"À la réception":o.pay,items:o.items,subtotal:o.subtotal,fee:o.fee,discount:o.discount,total:Math.round(o.total),promo:o.promo||null};
   if(cloud.user) row.user_id=cloud.user.id;
-  sb.from("orders").insert(row).then(function(r){
-    if(r.error) return;
-    if(cloud.user){ row.status="nouvelle"; row.created_at=new Date().toISOString(); cloud.orders.unshift(row); }
+  var t=new Promise(function(r){ setTimeout(function(){ r({error:{message:"timeout"}}); },12000); });
+  return Promise.race([sb.from("orders").insert(row),t]).then(function(r){
+    if(r.error) return false;
+    if(cloud.user){ var c=Object.assign({},row,{status:"nouvelle",pay_status:"en attente",created_at:new Date().toISOString()}); cloud.orders.unshift(c); }
     if(cloud.staff) refreshNew();
-  });
+    return true;
+  }).catch(function(){ return false; });
+}
+function checkAutopay(){
+  if(!sb) return;
+  fetch(CFG.url+"/functions/v1/pay?action=config",{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.key},body:"{}"}).then(function(r){ return r.ok?r.json():{}; }).then(function(r){ cloud.autopay=!!(r&&r.auto); applyShop(); }).catch(function(){});
+}
+function payChip(o){
+  var ps=o.pay_status||"en attente";
+  if(ps==="payé") return '<span class="paychip ok">Payé'+(o.pay_method?' · '+esc(o.pay_method):'')+'</span>';
+  if(ps==="déclaré") return '<span class="paychip wait">Paiement déclaré'+(o.pay_ref?' · code '+esc(o.pay_ref):'')+'</span>';
+  if(ps==="en cours") return '<span class="paychip wait">Paiement en cours</span>';
+  if(ps==="échoué") return '<span class="paychip bad">Paiement échoué</span>';
+  return '<span class="paychip">'+esc(o.pay_method||o.pay||"À la réception")+'</span>';
 }
 
 /* --- fenêtre « Mon compte » --- */
@@ -1889,7 +2098,7 @@ function openAccount(view){
     var ask=waLink("Bonjour "+S.shopName+", où en est ma commande "+o.ref+" ? Merci.");
     return '<div class="order"><div class="oh"><span class="ref-s gold-t">'+esc(o.ref)+'</span><span class="stchip st-'+STATUS.indexOf(o.status)+'">'+esc(STATUS_LBL[o.status]||o.status)+'</span></div>'+
       '<div class="note">'+fmtD(o.created_at)+' · '+(o.items||[]).map(function(it){return esc(it.name)+' ×'+it.qty}).join(" · ")+'</div>'+
-      '<div class="oh"><b class="num">'+fcfa(o.total)+'</b>'+(ask?'<a class="lnk" href="'+ask+'" target="_blank" rel="noopener">Suivre sur WhatsApp ↗</a>':'')+'</div>'+trackHTML(o.status)+'</div>';
+      '<div class="oh"><b class="num">'+fcfa(o.total)+'</b>'+payChip(o)+'</div>'+trackHTML(o.status)+(ask?'<a class="lnk" href="'+ask+'" target="_blank" rel="noopener">Écrire à la boutique ↗</a>':'')+'</div>';
   }).join(""):'<div class="empty">Vos commandes passées avec ce compte apparaîtront ici, sur tous vos appareils.</div>';
   openLayer('<div class="dh"><h2>Bonjour '+esc((p.name||"").split(" ")[0]||"à vous")+'</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db">'+
     (cloud.staff?'<div class="staffbox"><span class="eyebrow">Espace propriétaire</span><div class="row"><button class="btn primary" id="goDash">Commandes'+(cloud.newCount?' · '+cloud.newCount+' nouvelle'+(cloud.newCount>1?'s':''):'')+'</button><button class="btn ghost" id="goSell">Gérer les articles</button></div>'+(cloud.owner?'<button class="btn ghost" id="goTeam">Mon équipe · ajouter une gestionnaire</button>':'')+'</div>':'')+
@@ -1971,9 +2180,11 @@ function openDashboard(){
         '<div class="dcl"><b>'+esc(o.name)+'</b> · <a class="lnk" href="tel:+228'+esc(phoneDigits(o.phone))+'">'+esc(pretty(phoneDigits(o.phone)))+'</a>'+(wa?' · <a class="lnk" href="'+wa+'" target="_blank" rel="noopener">WhatsApp ↗</a>':'')+(o.user_id?' <span class="pill">Compte</span>':'')+'</div>'+
         '<div class="note">'+(o.mode==="retrait"?"Retrait en boutique":"Livraison · "+esc(o.zone||"")+(o.area?" — "+esc(o.area):""))+'</div>'+
         '<div class="note">'+(o.items||[]).map(function(it){return esc(it.name)+' ('+esc(it.size||"")+(it.color?", "+esc(it.color):"")+') ×'+it.qty}).join("<br>")+'</div>'+
-        '<div class="oh"><b class="num">'+fcfa(o.total)+'</b><span class="note">'+esc(o.pay||"")+(o.promo?' · '+esc(o.promo):'')+'</span></div>'+
+        '<div class="oh"><b class="num">'+fcfa(o.total)+'</b>'+payChip(o)+'</div>'+(o.promo?'<div class="note">Code promo '+esc(o.promo)+'</div>':'')+
+        (o.pay_status!=="payé"&&o.status!=="annulée"?'<button class="btn ghost paidbtn" data-paid="'+o.id+'">✓ Paiement reçu</button>':'')+
         '<div class="field"><label class="sr" for="st-'+o.id+'">Statut</label><select id="st-'+o.id+'" data-st="'+o.id+'" class="stsel st-'+STATUS.indexOf(o.status)+'">'+STATUS.map(function(s){return '<option value="'+s+'" '+(s===o.status?"selected":"")+'>'+STATUS_LBL[s]+'</option>'}).join("")+'</select></div></div>';
     }).join(""):'<div class="empty">Aucune commande '+(dash.filter==="toutes"?"pour le moment":"« "+esc(STATUS_LBL[dash.filter])+" »")+'.</div>');
+    layer.querySelectorAll("[data-paid]").forEach(function(b){ b.onclick=function(){ var id=+b.dataset.paid, o=dash.list.find(function(x){return x.id===id}); b.disabled=true; sb.from("orders").update({pay_status:"payé",paid_at:new Date().toISOString(),status:o&&(o.status==="nouvelle"||o.status==="confirmée")?"payée":(o?o.status:"payée")}).eq("id",id).then(function(r){ if(r.error){ b.disabled=false; toast("Modification impossible"); return; } toast("Paiement enregistré ✓"); load(); }); }; });
     layer.querySelectorAll("[data-st]").forEach(function(s){ s.onchange=function(){ var id=+s.dataset.st, v=s.value; s.disabled=true; sb.from("orders").update({status:v}).eq("id",id).then(function(r){ s.disabled=false; if(r.error){ toast("Modification impossible"); return; } toast("Statut : "+STATUS_LBL[v]); load(); }); }; });
   }
   openLayer('<div class="dh"><h2>Commandes</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db" id="dash">'+
@@ -2004,10 +2215,30 @@ function openTeam(){
   load();
 }
 
+/* --- alertes en direct pour l'équipe --- */
+var liveCh=null;
+function chime(){ try{ var A=window.AudioContext||window.webkitAudioContext; if(!A) return; var a=new A(); [880,1318.5,1760].forEach(function(f,i){ var o=a.createOscillator(), g=a.createGain(); o.type="sine"; o.frequency.value=f; g.gain.setValueAtTime(0,a.currentTime+i*.12); g.gain.linearRampToValueAtTime(.18,a.currentTime+i*.12+.02); g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+i*.12+.6); o.connect(g); g.connect(a.destination); o.start(a.currentTime+i*.12); o.stop(a.currentTime+i*.12+.7); }); }catch(e){} }
+function notify(title, body){
+  chime(); toast(title+" · "+body);
+  try{ if(window.Notification&&Notification.permission==="granted"&&document.hidden) new Notification(title,{body:body,icon:"icons/icon-192.png"}); }catch(e){}
+}
+function liveOrders(){
+  if(liveCh||!sb||!cloud.staff) return;
+  try{ if(window.Notification&&Notification.permission==="default") Notification.requestPermission(); }catch(e){}
+  liveCh=sb.channel("orders-live").on("postgres_changes",{event:"*",schema:"public",table:"orders"},function(ev){
+    var n=ev.new||{}, o=ev.old||{};
+    if(ev.eventType==="INSERT") notify("Nouvelle commande "+(n.ref||""), (n.name||"")+" · "+fcfa(n.total||0));
+    else if(ev.eventType==="UPDATE"&&n.pay_status==="payé"&&o.pay_status!=="payé") notify("Paiement reçu ✓", (n.ref||"")+" · "+fcfa(n.total||0));
+    else if(ev.eventType==="UPDATE"&&n.pay_status==="déclaré"&&o.pay_status!=="déclaré") notify("Paiement à vérifier", (n.ref||"")+" · code "+(n.pay_ref||""));
+    refreshNew(); if(layer.querySelector("#dash")) openDashboard();
+  }).subscribe();
+}
+
 if(sb){
   $("#accBtn").onclick=function(){ openAccount(); };
   sb.auth.onAuthStateChange(function(ev,session){ if(ev==="PASSWORD_RECOVERY"){ onSession(session); setTimeout(newPassword,300); return; } setTimeout(function(){ onSession(session); },0); });
   sb.auth.getSession().then(function(r){ onSession(r.data.session); });
+  checkAutopay();
   setInterval(refreshNew,60000);
 }
 accLabel();
