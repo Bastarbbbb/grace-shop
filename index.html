@@ -610,10 +610,10 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 .staffbox{border:1px solid var(--gold);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px;background:rgba(217,178,111,.06)}
 .stchip{font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 10px;border:1px solid var(--line);color:var(--gold-hi)}
 .st-0{color:#F2D9A6;border-color:rgba(242,217,166,.5)}.st-1{color:#9EC5FF;border-color:rgba(158,197,255,.45)}.st-2{color:var(--ok);border-color:rgba(127,209,168,.5)}.st-3{color:#FFC27A;border-color:rgba(255,194,122,.5)}.st-4{color:var(--ok);border-color:rgba(127,209,168,.5)}.st-5{color:var(--danger);border-color:rgba(240,138,138,.5)}
-.track{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:4px}
-.track span{display:flex;flex-direction:column;gap:6px;font-size:.62rem;color:var(--muted);text-align:center}
-.track i{height:4px;border-radius:999px;background:rgba(243,238,230,.1)}
-.track span.on{color:var(--gold-hi)}.track span.on i{background:var(--gold-grad)}
+.otrack{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:4px}
+.otrack span{display:flex;flex-direction:column;gap:6px;font-size:.62rem;color:var(--muted);text-align:center}
+.otrack i{height:4px;border-radius:999px;background:rgba(243,238,230,.1)}
+.otrack span.on{color:var(--gold-hi)}.otrack span.on i{background:var(--gold-grad)}
 .acc-edit{border:1px solid var(--line-2);border-radius:16px;padding:12px 14px}
 .acc-edit summary{cursor:pointer;font-weight:700}
 .acc-edit[open]{display:flex;flex-direction:column;gap:12px}
@@ -1901,7 +1901,7 @@ function openAccount(view){
 function trackHTML(st){
   if(st==="annulée") return '<p class="note err" style="margin:0">Commande annulée</p>';
   var steps=["nouvelle","confirmée","payée","en livraison","livrée"], k=steps.indexOf(st);
-  return '<div class="track">'+steps.map(function(s,i){return '<span class="'+(i<=k?"on":"")+'"><i></i>'+STATUS_LBL[s]+'</span>'}).join("")+'</div>';
+  return '<div class="otrack">'+steps.map(function(s,i){return '<span class="'+(i<=k?"on":"")+'"><i></i>'+STATUS_LBL[s]+'</span>'}).join("")+'</div>';
 }
 function accForm(){
   var su=accMode==="signup";
