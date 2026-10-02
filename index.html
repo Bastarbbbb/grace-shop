@@ -2067,6 +2067,10 @@ function cloudOrder(o){
   if(cloud.user) row.user_id=cloud.user.id;
   var t=new Promise(function(r){ setTimeout(function(){ r({error:{message:"timeout"}}); },12000); });
   return Promise.race([sb.from("orders").insert(row),t]).then(function(r){
+    // base pas encore mise à jour : on renvoie la commande sans les champs de paiement
+    if(r.error&&/column|schema cache/i.test(r.error.message||"")){ var legacy=Object.assign({},row); delete legacy.client_key; delete legacy.pay_method; return Promise.race([sb.from("orders").insert(legacy),t]); }
+    return r;
+  }).then(function(r){
     if(r.error) return false;
     if(cloud.user){ var c=Object.assign({},row,{status:"nouvelle",pay_status:"en attente",created_at:new Date().toISOString()}); cloud.orders.unshift(c); }
     if(cloud.staff) refreshNew();
