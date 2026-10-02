@@ -33,7 +33,10 @@ jobs:
             echo "::error::Ajoutez les secrets GS_KEYSTORE_B64 et GS_STORE_PASS (Settings > Secrets and variables > Actions)."
             exit 1
           fi
-          echo "$GS_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/grace-shop.jks"
+          printf '%s' "$GS_KEYSTORE_B64" | tr -cd 'A-Za-z0-9+/=' | base64 -d > "$RUNNER_TEMP/grace-shop.jks"
+          export GS_STORE_PASS="$(printf '%s' "$GS_STORE_PASS" | tr -d '[:space:]')"
+          export GS_KEY_PASS="$GS_STORE_PASS"
+          echo "Taille de la clé : $(wc -c < "$RUNNER_TEMP/grace-shop.jks") octets (attendu : 2670)"
           export GS_KEYSTORE="$RUNNER_TEMP/grace-shop.jks"
           gradle -p android assembleRelease --no-daemon
           cp android/app/build/outputs/apk/release/app-release.apk grace-shop.apk
