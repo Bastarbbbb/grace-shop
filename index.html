@@ -600,6 +600,31 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 .club-bar{height:6px;border-radius:999px;background:rgba(243,238,230,.08);overflow:hidden}
 .club-bar i{display:block;height:100%;background:var(--gold-grad);border-radius:inherit}
 .club-note{margin:10px 0 0;color:var(--muted);font-size:.8rem}
+
+/* ===== comptes & commandes ===== */
+.accbtn.on{border-color:var(--gold);color:var(--gold-hi)}
+.seg{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:var(--bg2);border:1px solid var(--line-2)}
+.seg button{border:0;background:transparent;border-radius:999px;padding:10px;font-weight:700;color:var(--muted)}
+.seg button[aria-selected="true"]{background:var(--gold-grad);color:var(--gold-ink)}
+.lnk{background:none;border:0;padding:0;color:var(--gold-hi);text-decoration:underline;text-underline-offset:3px;font:inherit;cursor:pointer}
+.staffbox{border:1px solid var(--gold);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px;background:rgba(217,178,111,.06)}
+.stchip{font-size:.66rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 10px;border:1px solid var(--line);color:var(--gold-hi)}
+.st-0{color:#F2D9A6;border-color:rgba(242,217,166,.5)}.st-1{color:#9EC5FF;border-color:rgba(158,197,255,.45)}.st-2{color:var(--ok);border-color:rgba(127,209,168,.5)}.st-3{color:#FFC27A;border-color:rgba(255,194,122,.5)}.st-4{color:var(--ok);border-color:rgba(127,209,168,.5)}.st-5{color:var(--danger);border-color:rgba(240,138,138,.5)}
+.track{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:4px}
+.track span{display:flex;flex-direction:column;gap:6px;font-size:.62rem;color:var(--muted);text-align:center}
+.track i{height:4px;border-radius:999px;background:rgba(243,238,230,.1)}
+.track span.on{color:var(--gold-hi)}.track span.on i{background:var(--gold-grad)}
+.acc-edit{border:1px solid var(--line-2);border-radius:16px;padding:12px 14px}
+.acc-edit summary{cursor:pointer;font-weight:700}
+.acc-edit[open]{display:flex;flex-direction:column;gap:12px}
+.dchips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.dchips button{flex:none;border:1px solid var(--line-2);background:transparent;border-radius:999px;padding:7px 13px;font-size:.8rem;font-weight:700;color:var(--muted)}
+.dchips button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-hi);background:rgba(217,178,111,.08)}
+.dorder{gap:8px}
+.dcl{font-size:.9rem}
+.stsel{font-weight:700}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+#accN{position:absolute;top:-6px;right:-6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none;filter:none}}
 </style>
 
@@ -634,6 +659,7 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
     <div class="search"><input id="q" type="search" placeholder="Rechercher une robe, un boubou, du wax…" aria-label="Rechercher"></div>
     <button class="iconbtn sellerbtn" id="sellerBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg><span class="lbl-hide">Publier</span></button>
     <button class="iconbtn" id="ordersBtn" aria-label="Mes commandes" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/></svg><span class="lbl-hide">Commandes</span></button>
+    <button class="iconbtn accbtn" id="accBtn" aria-label="Mon compte" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span class="lbl-hide" id="accLbl">Se connecter</span><span class="badge num" id="accN" hidden>0</span></button>
     <button class="iconbtn" id="favBtn" aria-label="Mes favoris"><svg><use href="#i-heart"/></svg><span class="badge num" id="favCount">0</span></button>
     <button class="iconbtn" id="cartBtn" aria-label="Ouvrir le panier"><svg><use href="#i-bag"/></svg><span class="lbl-hide">Panier</span><span class="badge num" id="cartCount">0</span></button>
   </div>
@@ -734,6 +760,8 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 <div id="layer"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
 <script id="shop-data" type="application/json">{"settings": {"shopName": "Grace Shop", "slogan": "Portez la grâce.", "city": "Lomé", "whatsapp": "91563836", "tmoney": "91563836", "flooz": "", "paygate": "", "delivery": 1000, "heroText": "L'élégance africaine, livrée à votre porte. Robes en wax, boubous, bijoux et accessoires choisis avec soin.", "flashTitle": "Vente flash de la rentrée", "flashEnd": "2026-10-12T23:59", "codes": [{"code": "GRACE10", "pct": 10}], "freeFrom": 30000}, "categories": ["Femme", "Homme", "Enfant", "Wax & Pagne", "Bijoux", "Accessoires"], "posts": [], "rev": 0, "jewelSubs": ["Bracelets", "Chaînes & colliers", "Bagues", "Boucles d'oreilles", "Montres"], "products": [{"id": "g01", "name": "Robe portefeuille Akosua en wax", "price": 18500, "cat": "Femme", "sizes": ["S", "M", "L", "XL", "XXL"], "colors": ["Indigo", "Safran"], "desc": "Robe portefeuille mi-longue en wax 100 % coton, ceinture à nouer, manches ballon. Se porte au bureau comme en cérémonie.", "stock": 8, "isNew": true, "shape": "dress", "added": 33, "pal": ["#2E2470", "#E7A220", "#F2D9A6"], "oldPrice": 23000}, {"id": "g02", "name": "Robe sirène Afi soirée", "price": 32000, "cat": "Femme", "sizes": ["S", "M", "L", "XL"], "colors": ["Bordeaux", "Noir"], "desc": "Coupe sirène près du corps, tissu satiné stretch, fente arrière. Pour les mariages et les soirées.", "stock": 4, "isNew": true, "shape": "dress", "added": 32, "pal": ["#6E1E3A", "#D9B26F", "#F7E4B8"]}, {"id": "g03", "name": "Ensemble crop top et jupe Yawa", "price": 22000, "cat": "Femme", "sizes": ["S", "M", "L", "XL"], "colors": ["Vert", "Orange"], "desc": "Ensemble deux pièces en pagne : crop top à bretelles et jupe crayon taille haute.", "stock": 6, "isNew": true, "shape": "skirt", "added": 31, "pal": ["#1F5E46", "#E08A3C", "#F2D9A6"]}, {"id": "g04", "name": "Kaba moderne Mawuena", "price": 27500, "cat": "Femme", "sizes": ["S", "M", "L", "XL", "XXL"], "colors": ["Violet", "Doré"], "desc": "Kaba revisité en bazin brodé, coupe ample et élégante, finitions dorées à l'encolure.", "stock": 5, "isNew": false, "shape": "robe", "added": 15, "pal": ["#5B2A88", "#D9B26F", "#F2D9A6"]}, {"id": "g05", "name": "Jupe plissée midi Esi", "price": 11000, "cat": "Femme", "sizes": ["S", "M", "L", "XL"], "colors": ["Bordeaux", "Noir"], "desc": "Jupe plissée fluide, taille haute élastiquée, longueur mi-mollet.", "stock": 9, "isNew": false, "shape": "skirt", "added": 14, "pal": ["#6E1E3A", "#3A0F1E", "#D9B26F"], "oldPrice": 14000}, {"id": "g06", "name": "Blouse en soie Dzifa", "price": 13500, "cat": "Femme", "sizes": ["S", "M", "L", "XL"], "colors": ["Rose", "Blanc"], "desc": "Blouse légère col lavallière, manches longues resserrées aux poignets.", "stock": 7, "isNew": false, "shape": "shirt", "added": 14, "pal": ["#E58FA8", "#F3EEE6", "#D9B26F"]}, {"id": "g07", "name": "Combinaison pantalon Akpene", "price": 19500, "cat": "Femme", "sizes": ["S", "M", "L", "XL"], "colors": ["Noir", "Beige"], "desc": "Combinaison fluide à jambes larges, décolleté croisé, ceinture assortie.", "stock": 5, "isNew": true, "shape": "pants", "added": 27, "pal": ["#0E0E10", "#D9B26F", "#3A3040"]}, {"id": "g08", "name": "T-shirt oversize Grace", "price": 6500, "cat": "Femme", "sizes": ["S", "M", "L", "XL", "XXL"], "colors": ["Blanc", "Noir", "Safran"], "desc": "T-shirt coupe oversize en coton épais, broderie Grace sur la poitrine.", "stock": 20, "isNew": false, "shape": "tshirt", "added": 13, "pal": ["#D9B26F", "#5B2A4A", "#F7E4B8"]}, {"id": "g09", "name": "Boubou brodé trois pièces Kodjo", "price": 35000, "cat": "Homme", "sizes": ["M", "L", "XL", "XXL"], "colors": ["Blanc", "Bleu nuit"], "desc": "Grand boubou en bazin riche avec pantalon et tunique assortis, broderie main au col.", "stock": 4, "isNew": true, "shape": "robe", "added": 25, "pal": ["#EDE6D8", "#B8935A", "#F7E4B8"]}, {"id": "g10", "name": "Chemise wax manches courtes Edem", "price": 12000, "cat": "Homme", "sizes": ["S", "M", "L", "XL", "XXL"], "colors": ["Bleu", "Safran"], "desc": "Chemise en wax, col classique, coupe ajustée. Idéale pour le vendredi au bureau.", "stock": 12, "isNew": false, "shape": "shirt", "added": 12, "pal": ["#2C4FA8", "#E7A220", "#F3EEE6"], "oldPrice": 15000}, {"id": "g11", "name": "Ensemble lin Komlan", "price": 24000, "cat": "Homme", "sizes": ["M", "L", "XL", "XXL"], "colors": ["Sable", "Olive"], "desc": "Chemise col Mao et pantalon en lin respirant, parfait pour la chaleur.", "stock": 6, "isNew": true, "shape": "shirt", "added": 23, "pal": ["#C9B48A", "#6B7046", "#EDE6D8"]}, {"id": "g12", "name": "Pantalon chino ajusté", "price": 14000, "cat": "Homme", "sizes": ["30", "32", "34", "36", "38"], "colors": ["Beige", "Noir"], "desc": "Chino en coton stretch, coupe slim, ourlet à revers.", "stock": 10, "isNew": false, "shape": "pants", "added": 11, "pal": ["#C9B48A", "#8A8A93", "#EDE6D8"]}, {"id": "g13", "name": "Jean coupe droite brut", "price": 15000, "cat": "Homme", "sizes": ["30", "32", "34", "36"], "colors": ["Brut"], "desc": "Denim épais, coupe droite classique, cinq poches.", "stock": 0, "isNew": false, "shape": "pants", "added": 10, "pal": ["#2C3550", "#1A2034", "#8FA0C8"]}, {"id": "g14", "name": "Polo piqué premium", "price": 9000, "cat": "Homme", "sizes": ["S", "M", "L", "XL", "XXL"], "colors": ["Noir", "Blanc", "Bleu nuit"], "desc": "Polo en coton piqué, col côtelé, petit logo doré brodé.", "stock": 15, "isNew": false, "shape": "tshirt", "added": 10, "pal": ["#0E0E10", "#D9B26F", "#3A3040"]}, {"id": "g15", "name": "Ensemble pagne garçon Elom", "price": 9500, "cat": "Enfant", "sizes": ["2 ans", "4 ans", "6 ans", "8 ans"], "colors": ["Vert", "Orange"], "desc": "Chemise et short assortis en pagne, taille élastique pour plus de confort.", "stock": 8, "isNew": true, "shape": "tshirt", "added": 19, "pal": ["#1F5E46", "#E08A3C", "#F2D9A6"]}, {"id": "g16", "name": "Robe de fête fillette Sena", "price": 12500, "cat": "Enfant", "sizes": ["2 ans", "4 ans", "6 ans", "8 ans"], "colors": ["Rose", "Doré"], "desc": "Robe à jupon en tulle et haut en wax, nœud dans le dos. Pour les fêtes et baptêmes.", "stock": 6, "isNew": true, "shape": "dress", "added": 18, "pal": ["#E58FA8", "#D9B26F", "#F7E4B8"]}, {"id": "g17", "name": "T-shirt enfant imprimé", "price": 4000, "cat": "Enfant", "sizes": ["2 ans", "4 ans", "6 ans", "8 ans"], "colors": ["Jaune", "Bleu"], "desc": "T-shirt en coton doux, imprimé motif wax.", "stock": 18, "isNew": false, "shape": "tshirt", "added": 8, "pal": ["#F2C230", "#2C4FA8", "#F7E4B8"], "oldPrice": 5000}, {"id": "g18", "name": "Pagne wax hollandais 6 yards", "price": 16000, "cat": "Wax & Pagne", "sizes": ["Unique"], "colors": ["Indigo", "Rouge", "Vert"], "desc": "Pièce de 6 yards en wax hollandais, couleurs vives qui tiennent au lavage. À confectionner selon vos envies.", "stock": 15, "isNew": false, "shape": "fabric", "added": 8, "pal": ["#2E2470", "#B3261E", "#F2C230"]}, {"id": "g19", "name": "Pagne wax 3 yards motif œil", "price": 8500, "cat": "Wax & Pagne", "sizes": ["Unique"], "colors": ["Safran", "Bleu"], "desc": "Demi-pièce de 3 yards, idéale pour une jupe, une chemise ou un ensemble enfant.", "stock": 20, "isNew": true, "shape": "fabric", "added": 15, "pal": ["#E7A220", "#2C4FA8", "#F7E4B8"]}, {"id": "g20", "name": "Kenté tissé main", "price": 45000, "cat": "Wax & Pagne", "sizes": ["Unique"], "colors": ["Doré", "Vert"], "desc": "Kenté traditionnel tissé main, bandes assemblées. Pour les grandes cérémonies.", "stock": 3, "isNew": true, "shape": "fabric", "added": 14, "pal": ["#1F5E46", "#D9B26F", "#B3261E"]}, {"id": "g21", "name": "Chaîne maille cubaine", "price": 14000, "cat": "Bijoux", "sizes": ["45 cm", "50 cm", "60 cm"], "colors": ["Doré", "Argenté"], "desc": "Maille cubaine épaisse en acier plaqué or, fermoir sécurisé. Ne noircit pas.", "stock": 7, "isNew": true, "shape": "chain", "added": 13, "sub": "Chaînes & colliers", "material": "Acier plaqué or"}, {"id": "g22", "name": "Collier prénom personnalisé", "price": 12000, "cat": "Bijoux", "sizes": ["45 cm", "50 cm"], "colors": ["Doré", "Argenté"], "desc": "Votre prénom en lettres attachées. Indiquez le prénom souhaité dans le message WhatsApp.", "stock": 10, "isNew": true, "shape": "chain", "added": 12, "sub": "Chaînes & colliers", "material": "Acier inoxydable"}, {"id": "g23", "name": "Bague solitaire Grâce", "price": 9000, "cat": "Bijoux", "sizes": ["50", "52", "54", "56", "58"], "colors": ["Argenté", "Doré"], "desc": "Solitaire serti d'un zircon taille brillant, anneau fin.", "stock": 5, "isNew": true, "shape": "ring", "added": 11, "sub": "Bagues", "material": "Argent 925"}, {"id": "g24", "name": "Bague jonc martelé", "price": 6500, "cat": "Bijoux", "sizes": ["52", "54", "56", "58", "60"], "colors": ["Doré"], "desc": "Anneau large à finition martelée, se porte seul ou en accumulation.", "stock": 8, "isNew": false, "shape": "ring", "added": 5, "sub": "Bagues", "material": "Laiton doré"}, {"id": "g25", "name": "Bracelet jonc torsadé", "price": 7500, "cat": "Bijoux", "sizes": ["Unique"], "colors": ["Doré"], "desc": "Jonc ouvert ajustable, finition torsadée brillante.", "stock": 9, "isNew": false, "shape": "bracelet", "added": 4, "oldPrice": 9500, "sub": "Bracelets", "material": "Laiton doré"}, {"id": "g26", "name": "Bracelet perles de verre Krobo", "price": 5000, "cat": "Bijoux", "sizes": ["Unique"], "colors": ["Doré", "Vert"], "desc": "Perles de verre recyclé façonnées à la main, fermeture élastique.", "stock": 14, "isNew": false, "shape": "bracelet", "added": 4, "sub": "Bracelets", "material": "Perles"}, {"id": "g27", "name": "Créoles perles d'eau douce", "price": 6500, "cat": "Bijoux", "sizes": ["Unique"], "colors": ["Doré"], "desc": "Créoles légères ornées de perles naturelles.", "stock": 6, "isNew": false, "shape": "earrings", "added": 3, "sub": "Boucles d'oreilles", "material": "Plaqué or"}, {"id": "g28", "name": "Boucles pendantes Afrique", "price": 8000, "cat": "Bijoux", "sizes": ["Unique"], "colors": ["Doré"], "desc": "Pendentifs en forme de carte d'Afrique, légers et brillants.", "stock": 7, "isNew": true, "shape": "earrings", "added": 6, "sub": "Boucles d'oreilles", "material": "Acier plaqué or"}, {"id": "g29", "name": "Montre cadran champagne", "price": 22000, "cat": "Bijoux", "sizes": ["Unique"], "colors": ["Doré", "Argenté"], "desc": "Bracelet maille milanaise, mouvement quartz, étanche aux éclaboussures.", "stock": 3, "isNew": false, "shape": "watch", "added": 2, "sub": "Montres", "material": "Acier inoxydable"}, {"id": "g30", "name": "Montre homme chrono", "price": 28000, "cat": "Bijoux", "sizes": ["Unique"], "colors": ["Argenté", "Noir"], "desc": "Chronographe, cadran noir et lunette graduée, bracelet acier.", "stock": 3, "isNew": true, "shape": "watch", "added": 4, "sub": "Montres", "material": "Acier inoxydable"}, {"id": "g31", "name": "Sac cabas en pagne", "price": 7500, "cat": "Accessoires", "sizes": ["Unique"], "colors": ["Rouge", "Doré"], "desc": "Grand cabas doublé, anses en simili cuir, poche intérieure zippée.", "stock": 4, "isNew": false, "shape": "bag", "added": 1, "pal": ["#8E2436", "#D9B26F", "#2E2470"]}, {"id": "g32", "name": "Pochette de soirée dorée", "price": 10000, "cat": "Accessoires", "sizes": ["Unique"], "colors": ["Doré", "Noir"], "desc": "Pochette rigide à chaînette amovible, pour vos soirées et cérémonies.", "stock": 5, "isNew": true, "shape": "bag", "added": 2, "pal": ["#D9B26F", "#0E0E10", "#F7E4B8"]}, {"id": "g33", "name": "Foulard gélé à nouer", "price": 5500, "cat": "Accessoires", "sizes": ["Unique"], "colors": ["Violet", "Doré"], "desc": "Gélé en tissu rigide brillant, se noue facilement pour un port élégant.", "stock": 12, "isNew": false, "shape": "skirt", "added": 0, "pal": ["#5B2A88", "#D9B26F", "#F2D9A6"], "oldPrice": 7000}]}</script>
 
 <script>
@@ -1154,7 +1182,7 @@ var vObs = "IntersectionObserver" in window ? new IntersectionObserver(function(
   es.forEach(function(e){ var v=e.target; if(e.isIntersecting&&e.intersectionRatio>.55){ var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); } else v.pause(); });
 },{threshold:[0,.55,1]}) : null;
 function watchVideos(){ if(!vObs||reduce) return; document.querySelectorAll("video[data-auto]").forEach(function(v){ vObs.observe(v); }); }
-function saveFavs(){ store.set("grace-favs",state.favs); var n=state.favs.length; $("#favCount").textContent=n; var b=$("#favCount2"); b.textContent=n; b.hidden=!n; }
+function saveFavs(noSync){ store.set("grace-favs",state.favs); if(!noSync&&typeof syncFavs==="function") syncFavs(); var n=state.favs.length; $("#favCount").textContent=n; var b=$("#favCount2"); b.textContent=n; b.hidden=!n; }
 if(!reduce){
   document.addEventListener("pointermove",function(e){
     var c=e.target.closest&&e.target.closest(".pin .pm"); if(!c||e.pointerType==="touch") return;
@@ -1355,6 +1383,7 @@ function showReceipt(total, fee, disc, promo){
   var wa = waLink(msg);
   state.orders.unshift({ref:ref,date:Date.now(),total:total,count:lines.reduce(function(s,x){return s+x.l.qty},0),items:lines.map(function(x){return {id:x.p.id,name:x.p.name,size:x.l.size,color:x.l.color,qty:x.l.qty}}),pay:payLabel,mode:d.mode});
   state.orders=state.orders.slice(0,30); store.set("grace-orders",state.orders); updOrders();
+  cloudOrder({ref:ref,name:d.name,phone:d.phone,mode:d.mode,zone:d.mode==="livraison"?((zones()[d.zone]||[""])[0]):"",area:d.mode==="livraison"?d.area:"",pay:payLabel,items:lines.map(function(x){return {id:x.p.id,name:x.p.name,size:x.l.size,color:x.l.color,qty:x.l.qty,price:x.p.price}}),subtotal:subtotal(),fee:fee,discount:disc,total:total,promo:promo?promo.code:""});
   openLayer('<div class="dh"><h2>Merci '+esc(d.name.split(" ")[0])+' !</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db">'+
     '<div class="receipt"><span class="lbl" style="margin:0">Référence de commande</span><span class="ref gold-t">'+ref+'</span><span class="num">'+fcfa(total)+' · '+lines.reduce(function(s,x){return s+x.l.qty},0)+' article(s)</span></div>'+
     payBlock+
@@ -1388,7 +1417,7 @@ function renderFlash(){
 }
 
 /* ---------- Grace Club (fidélité) ---------- */
-function clubPoints(){ return state.orders.reduce(function(s,o){return s+Math.floor((o.total||0)/1000)},0); }
+function clubPoints(){ if(cloud&&cloud.user) return cloudPoints(); return state.orders.reduce(function(s,o){return s+Math.floor((o.total||0)/1000)},0); }
 function clubCard(){
   var pts=clubPoints(), tiers=[["Perle",0],["Or",50],["Diamant",150]], t=tiers[0], nx=null;
   tiers.forEach(function(x,i){ if(pts>=x[1]){ t=x; nx=tiers[i+1]||null; } });
@@ -1396,11 +1425,12 @@ function clubCard(){
   return '<div class="club"><div class="club-top"><span class="club-logo">✦ Grace Club</span><span class="club-tier">Niveau '+t[0]+'</span></div>'+
     '<div class="club-pts"><b class="num gold-t">'+pts+'</b><span>points</span></div>'+
     '<div class="club-bar"><i style="width:'+pc.toFixed(0)+'%"></i></div>'+
-    '<p class="club-note">'+(nx?'Encore <b class="num">'+(nx[1]-pts)+'</b> points pour le niveau '+nx[0]+'.':'Vous êtes au plus haut niveau. Merci pour votre fidélité !')+' 1 point pour 1&nbsp;000&nbsp;FCFA d\'achat, indiqué dans chaque commande envoyée à la boutique.</p></div>';
+    '<p class="club-note">'+(nx?'Encore <b class="num">'+(nx[1]-pts)+'</b> points pour le niveau '+nx[0]+'.':'Vous êtes au plus haut niveau. Merci pour votre fidélité !')+' 1 point pour 1&nbsp;000&nbsp;FCFA d\'achat'+(cloud&&cloud.user?', crédité quand la commande est payée ou livrée.':', indiqué dans chaque commande envoyée à la boutique.')+'</p></div>';
 }
 /* ---------- mes commandes ---------- */
 function updOrders(){ var b=$("#ordersBtn"); if(b) b.hidden=!state.orders.length; }
 function openOrders(){
+  if(sb&&cloud.user) return openAccount();
   var fmtD=function(t){ try{ return new Date(t).toLocaleDateString("fr-FR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } };
   var body = state.orders.length ? state.orders.map(function(o,i){
     var ask=waLink("Bonjour "+S.shopName+", où en est ma commande "+o.ref+" ? Merci.");
@@ -1608,6 +1638,7 @@ function openSeller(){
 // Les données vont dans data/shop.json et chaque vidéo dans media/… ; repli sur une page complète si ce mode n'est pas disponible.
 var PREFIX='<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,-apple-system,sans-serif;background:#fafafa}img{max-width:100%}[hidden]{display:none!important}</style></head><body>';
 function publish(){
+  if(sb&&cloud.staff) return cloudPublish();
   var btn=$("#publish"); if(btn){btn.disabled=true;btn.textContent="Publication…";}
   DATA.rev=(DATA.rev||0)+1;
   var files={"data/shop.json":{content:JSON.stringify(DATA),contentType:"application/json"}};
@@ -1716,11 +1747,239 @@ document.addEventListener("click",function(e){ var d=e.target.closest("[data-cam
 function boot(){ S=DATA.settings; DATA.posts=DATA.posts||[]; applyShop(); renderGrid(); renderFlash(); renderBanner(); showCampaign(0,true); }
 boot(); saveCart(); saveFavs(); updOrders();
 // Les publications du vendeur (data/shop.json) remplacent les données intégrées si elles sont plus récentes.
-fetch("data/shop.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).then(function(d){
+var cloudFirst=CLOUD_LOAD();
+function CLOUD_LOAD(){ return (window.GS_CLOUD&&window.GS_CLOUD.url&&window.supabase)?null:fetch("data/shop.json",{cache:"no-store"}).then(function(r){ return r.ok?r.json():null; }).then(function(d){
   if(d&&d.products&&(d.rev||0)>=(DATA.rev||0)){ DATA=d; boot(); deepLink(); }
-}).catch(function(){});
+}).catch(function(){}); }
 function deepLink(){ var h=(location.hash||"").slice(1); if(!h||layer.innerHTML) return; if(DATA.products.some(function(p){return p.id===h})) openProduct(h); else if((DATA.posts||[]).some(function(p){return p.id===h})) openPost(h); }
 deepLink();
+
+/* ===== Comptes, espace propriétaire et commandes en ligne (Supabase) ===== */
+var CFG=window.GS_CLOUD||{}, sb=null;
+var cloud={user:null, profile:null, staff:false, orders:[], newCount:0, points:0, ready:false};
+try{ if(CFG.url&&CFG.key&&window.supabase) sb=window.supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}); }catch(e){ sb=null; }
+var STATUS=["nouvelle","confirmée","payée","en livraison","livrée","annulée"];
+var STATUS_LBL={"nouvelle":"Nouvelle","confirmée":"Confirmée","payée":"Payée","en livraison":"En livraison","livrée":"Livrée","annulée":"Annulée"};
+function phoneDigits(v){ var d=String(v||"").replace(/\D/g,""); if(d.indexOf("00228")===0) d=d.slice(5); else if(d.indexOf("228")===0&&d.length>8) d=d.slice(3); return d; }
+// Une cliente peut s'identifier avec son numéro : il devient un identifiant interne.
+function loginId(v){ v=String(v||"").trim(); if(v.indexOf("@")>0) return v.toLowerCase(); var d=phoneDigits(v); return d.length>=8?"228"+d+"@tel.grace-shop.app":""; }
+function isPhoneId(email){ return /@tel\.grace-shop\.app$/.test(email||""); }
+function authErr(e){
+  var m=(e&&(e.message||e.error_description))||"";
+  if(/Invalid login/i.test(m)) return "Identifiant ou mot de passe incorrect.";
+  if(/already registered|already been registered|exists/i.test(m)) return "Un compte existe déjà avec cet identifiant. Connectez-vous.";
+  if(/Password should be|at least 6/i.test(m)) return "Le mot de passe doit contenir au moins 6 caractères.";
+  if(/Email not confirmed/i.test(m)) return "Confirmez d'abord votre adresse email (regardez vos messages).";
+  if(/rate limit|too many/i.test(m)) return "Trop d'essais. Patientez une minute puis réessayez.";
+  if(/fetch|network/i.test(m)) return "Pas de connexion internet. Réessayez.";
+  return "Une erreur est survenue. Réessayez dans un instant.";
+}
+function accLabel(){
+  var b=$("#accBtn"); if(!b) return;
+  b.hidden=!sb;
+  var name=cloud.profile&&cloud.profile.name?cloud.profile.name.split(" ")[0]:"";
+  $("#accLbl").textContent=cloud.user?(cloud.staff?"Gestion":(name||"Mon compte")):"Se connecter";
+  var n=$("#accN"); n.textContent=cloud.newCount; n.hidden=!(cloud.staff&&cloud.newCount);
+  b.classList.toggle("on",!!cloud.user);
+}
+function cloudPoints(){ return cloud.orders.filter(function(o){return o.status==="payée"||o.status==="livrée"}).reduce(function(s,o){return s+Math.floor((o.total||0)/1000)},0); }
+
+/* --- session --- */
+function onSession(session){
+  var u=session&&session.user||null, was=cloud.user&&cloud.user.id;
+  cloud.user=u;
+  if(!u){ cloud.profile=null; cloud.staff=false; cloud.orders=[]; cloud.newCount=0; state.canEdit=false; $("#sellerBtn").hidden=true; renderBanner(); renderGrid(); accLabel(); return; }
+  if(was===u.id&&cloud.ready) return;
+  cloud.ready=true;
+  Promise.all([
+    sb.from("profiles").select("*").eq("id",u.id).maybeSingle(),
+    sb.rpc("is_staff"),
+    sb.from("orders").select("*").eq("user_id",u.id).order("created_at",{ascending:false}).limit(50)
+  ]).then(function(r){
+    cloud.profile=r[0].data||{id:u.id,name:(u.user_metadata||{}).name||"",phone:(u.user_metadata||{}).phone||"",favs:[]};
+    cloud.staff=!!r[1].data;
+    cloud.orders=r[2].data||[];
+    // favoris : on réunit ceux du téléphone et ceux du compte
+    var f=(cloud.profile.favs||[]).concat(state.favs).filter(function(x,i,a){return a.indexOf(x)===i&&DATA.products.some(function(p){return p.id===x})});
+    var changed=f.length!==(cloud.profile.favs||[]).length; state.favs=f; saveFavs(true); if(changed) syncFavs();
+    if(cloud.profile.name&&!draft.name) draft.name=cloud.profile.name;
+    if(cloud.profile.phone&&!draft.phone) draft.phone=cloud.profile.phone;
+    state.canEdit=cloud.staff; $("#sellerBtn").hidden=!cloud.staff; renderBanner(); renderGrid();
+    if(cloud.staff) refreshNew();
+    accLabel(); updOrders();
+  }).catch(function(){ accLabel(); });
+}
+var favT=null;
+function syncFavs(){ if(!sb||!cloud.user) return; clearTimeout(favT); favT=setTimeout(function(){ sb.from("profiles").upsert({id:cloud.user.id,favs:state.favs}).then(function(){}); },800); }
+function refreshNew(){ if(!sb||!cloud.staff) return; sb.from("orders").select("id",{count:"exact",head:true}).eq("status","nouvelle").then(function(r){ cloud.newCount=r.count||0; accLabel(); }); }
+
+/* --- catalogue en ligne --- */
+function cloudLoad(){
+  if(!sb) return Promise.resolve(false);
+  return sb.from("shop").select("data,rev").eq("id",1).maybeSingle().then(function(r){
+    var d=r.data&&r.data.data; if(d&&d.products){ DATA=d; DATA.rev=r.data.rev; boot(); deepLink(); return true; } return false;
+  }).catch(function(){ return false; });
+}
+
+/* --- publication par la propriétaire : envoi des fichiers puis du catalogue --- */
+function dataURLtoBlob(u){ var p=u.split(","), mime=(p[0].match(/:(.*?);/)||[])[1]||"image/jpeg", b=atob(p[1]), a=new Uint8Array(b.length); for(var i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return new Blob([a],{type:mime}); }
+function upload(path, blob){
+  return sb.storage.from("media").upload(path, blob, {upsert:true, contentType:blob.type||undefined, cacheControl:"31536000"}).then(function(r){
+    if(r.error) throw r.error; return sb.storage.from("media").getPublicUrl(path).data.publicUrl;
+  });
+}
+function cloudPublish(){
+  var btn=$("#publish"); if(btn){btn.disabled=true;btn.textContent="Envoi des photos…";}
+  var jobs=[], stamp=Date.now().toString(36);
+  // vidéos et fichiers en attente
+  var map={};
+  Object.keys(BLOBS).forEach(function(path){ jobs.push(upload(path.replace(/^media\//,"v/")+"", BLOBS[path]).then(function(url){ map[path]=url; })); });
+  // photos intégrées (data:) → fichiers
+  var n=0;
+  function walk(o,key,base){ var v=o[key]; if(typeof v==="string"&&v.indexOf("data:")===0){ var k=base+"-"+stamp+"-"+(n++)+".jpg"; jobs.push(upload("img/"+k,dataURLtoBlob(v)).then(function(url){ o[key]=url; })); } }
+  DATA.products.forEach(function(p){ walk(p,"img",p.id); (p.media||[]).forEach(function(m){ walk(m,"src",p.id); walk(m,"poster",p.id+"-poster"); }); });
+  (DATA.posts||[]).forEach(function(po){ walk(po,"src",po.id||"post"); walk(po,"poster",(po.id||"post")+"-poster"); });
+  return Promise.all(jobs).then(function(){
+    function fix(o,key){ if(o&&map[o[key]]) { BLOB_URLS[map[o[key]]]=BLOB_URLS[o[key]]; o[key]=map[o[key]]; } }
+    DATA.products.forEach(function(p){ fix(p,"img"); (p.media||[]).forEach(function(m){ fix(m,"src"); }); });
+    (DATA.posts||[]).forEach(function(po){ fix(po,"src"); });
+    if(btn) btn.textContent="Publication…";
+    DATA.rev=(DATA.rev||0)+1;
+    return sb.from("shop").upsert({id:1,data:DATA,rev:DATA.rev,updated_at:new Date().toISOString()});
+  }).then(function(r){
+    if(r&&r.error) throw r.error;
+    state.dirty=false; BLOBS={}; state.deleted=[]; toast("Boutique publiée ✦ visible par toutes vos clientes"); if($("#publish")) openSeller();
+  }).catch(function(e){
+    DATA.rev=Math.max(0,(DATA.rev||1)-1);
+    if(btn){btn.disabled=false;btn.textContent="Publier maintenant";}
+    var m=(e&&e.message)||""; toast(/row-level|permission|policy|403|401/i.test(m)?"Ce compte n'a pas le droit de modifier la boutique":/size|large|413/i.test(m)?"Fichier trop lourd (50 Mo maximum)":"Publication impossible, vérifiez la connexion et réessayez");
+  });
+}
+
+/* --- commande enregistrée en ligne --- */
+function cloudOrder(o){
+  if(!sb) return;
+  var row={ref:o.ref,name:o.name.slice(0,120),phone:o.phone.slice(0,30),mode:o.mode,zone:(o.zone||"").slice(0,120),area:(o.area||"").slice(0,300),pay:(o.pay||"").slice(0,60),items:o.items,subtotal:o.subtotal,fee:o.fee,discount:o.discount,total:Math.round(o.total),promo:o.promo||null};
+  if(cloud.user) row.user_id=cloud.user.id;
+  sb.from("orders").insert(row).then(function(r){
+    if(r.error) return;
+    if(cloud.user){ row.status="nouvelle"; row.created_at=new Date().toISOString(); cloud.orders.unshift(row); }
+    if(cloud.staff) refreshNew();
+  });
+}
+
+/* --- fenêtre « Mon compte » --- */
+var accMode="login", accMsg="";
+function openAccount(view){
+  if(!sb){ openOrders(); return; }
+  if(!cloud.user) return accForm();
+  if(view==="shop"&&cloud.staff) return openDashboard();
+  var p=cloud.profile||{}, email=cloud.user.email||"";
+  var fmtD=function(t){ try{ return new Date(t).toLocaleDateString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } };
+  var orders=cloud.orders.length?cloud.orders.map(function(o){
+    var ask=waLink("Bonjour "+S.shopName+", où en est ma commande "+o.ref+" ? Merci.");
+    return '<div class="order"><div class="oh"><span class="ref-s gold-t">'+esc(o.ref)+'</span><span class="stchip st-'+STATUS.indexOf(o.status)+'">'+esc(STATUS_LBL[o.status]||o.status)+'</span></div>'+
+      '<div class="note">'+fmtD(o.created_at)+' · '+(o.items||[]).map(function(it){return esc(it.name)+' ×'+it.qty}).join(" · ")+'</div>'+
+      '<div class="oh"><b class="num">'+fcfa(o.total)+'</b>'+(ask?'<a class="lnk" href="'+ask+'" target="_blank" rel="noopener">Suivre sur WhatsApp ↗</a>':'')+'</div>'+trackHTML(o.status)+'</div>';
+  }).join(""):'<div class="empty">Vos commandes passées avec ce compte apparaîtront ici, sur tous vos appareils.</div>';
+  openLayer('<div class="dh"><h2>Bonjour '+esc((p.name||"").split(" ")[0]||"à vous")+'</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db">'+
+    (cloud.staff?'<div class="staffbox"><span class="eyebrow">Espace propriétaire</span><div class="row"><button class="btn primary" id="goDash">Commandes'+(cloud.newCount?' · '+cloud.newCount+' nouvelle'+(cloud.newCount>1?'s':''):'')+'</button><button class="btn ghost" id="goSell">Gérer les articles</button></div></div>':'')+
+    clubCard()+
+    '<div><div class="lbl">Mes commandes</div>'+orders+'</div>'+
+    '<details class="acc-edit"><summary>Mes informations</summary><div class="field"><label for="a-name">Nom complet</label><input id="a-name" value="'+esc(p.name||"")+'" autocomplete="name"></div><div class="field"><label for="a-phone">Téléphone</label><input id="a-phone" type="tel" value="'+esc(p.phone||"")+'"></div><p class="note">Identifiant : '+esc(isPhoneId(email)?"+228 "+pretty(email.slice(3,11)):email)+'</p><button class="btn ghost" id="saveProf">Enregistrer</button></details>'+
+    '</div><div class="df"><button class="btn ghost" id="logout">Se déconnecter</button></div>',"drawer");
+  var gd=$("#goDash"); if(gd) gd.onclick=openDashboard;
+  var gs=$("#goSell"); if(gs) gs.onclick=function(){ closeLayer(); tab="items"; openSeller(); };
+  $("#saveProf").onclick=function(){ var nm=$("#a-name").value.trim().slice(0,120), ph=$("#a-phone").value.trim().slice(0,30); sb.from("profiles").upsert({id:cloud.user.id,name:nm,phone:ph}).then(function(r){ if(r.error){toast("Enregistrement impossible");return;} cloud.profile.name=nm; cloud.profile.phone=ph; draft.name=nm; draft.phone=ph; accLabel(); toast("Informations enregistrées"); }); };
+  $("#logout").onclick=function(){ sb.auth.signOut().then(function(){ closeLayer(); toast("Vous êtes déconnectée"); }); };
+}
+function trackHTML(st){
+  if(st==="annulée") return '<p class="note err" style="margin:0">Commande annulée</p>';
+  var steps=["nouvelle","confirmée","payée","en livraison","livrée"], k=steps.indexOf(st);
+  return '<div class="track">'+steps.map(function(s,i){return '<span class="'+(i<=k?"on":"")+'"><i></i>'+STATUS_LBL[s]+'</span>'}).join("")+'</div>';
+}
+function accForm(){
+  var su=accMode==="signup";
+  openLayer('<div class="dh"><h2>'+(su?"Créer mon compte":"Se connecter")+'</h2><button class="x" data-close aria-label="Fermer">×</button></div><form class="db" id="accF" novalidate>'+
+    '<div class="seg" role="tablist"><button type="button" role="tab" aria-selected="'+!su+'" data-am="login">Connexion</button><button type="button" role="tab" aria-selected="'+su+'" data-am="signup">Nouveau compte</button></div>'+
+    '<p class="note" style="margin:0">'+(su?"Retrouvez vos commandes, vos favoris et vos points Grace Club sur tous vos appareils.":"Heureuse de vous revoir !")+'</p>'+
+    (su?'<div class="field"><label for="f-name">Nom complet</label><input id="f-name" autocomplete="name" required></div>':'')+
+    '<div class="field"><label for="f-id">Numéro de téléphone ou email</label><input id="f-id" autocomplete="username" inputmode="email" placeholder="90 12 34 56" required></div>'+
+    '<div class="field"><label for="f-pw">Mot de passe</label><input id="f-pw" type="password" autocomplete="'+(su?"new-password":"current-password")+'" minlength="6" required>'+(su?'<small class="note">6 caractères minimum.</small>':'')+'</div>'+
+    '<p class="err" id="accErr"'+(accMsg?'':' hidden')+'>'+esc(accMsg)+'</p>'+
+    '<button class="btn primary" id="accGo" type="submit">'+(su?"Créer mon compte":"Se connecter")+'</button>'+
+    (su?'':'<p class="note" style="margin:0">Mot de passe oublié ? '+(S.whatsapp?'<a class="lnk" href="'+waLink("Bonjour, j'ai oublié le mot de passe de mon compte "+S.shopName+".")+'" target="_blank" rel="noopener">Écrivez à la boutique</a>':'Contactez la boutique')+' ou, si vous vous êtes inscrite avec un email, <button type="button" class="lnk" id="forgot">recevez un lien</button>.</p>')+
+    '<p class="note" style="margin:0">Pas besoin de compte pour commander : il sert juste à tout retrouver.</p>'+
+    '</form>',"drawer");
+  accMsg="";
+  layer.querySelectorAll("[data-am]").forEach(function(b){ b.onclick=function(){ accMode=b.dataset.am; accForm(); }; });
+  var fg=$("#forgot"); if(fg) fg.onclick=function(){ var id=$("#f-id").value.trim(); if(id.indexOf("@")<0){ showErr("Indiquez d'abord votre email ci-dessus."); return; } sb.auth.resetPasswordForEmail(id,{redirectTo:location.origin+location.pathname}).then(function(r){ toast(r.error?"Envoi impossible pour le moment":"Lien envoyé : regardez vos emails"); }); };
+  function showErr(t){ var e=$("#accErr"); e.textContent=t; e.hidden=false; }
+  $("#accF").onsubmit=function(ev){
+    ev.preventDefault();
+    var raw=$("#f-id").value, id=loginId(raw), pw=$("#f-pw").value, nm=su?$("#f-name").value.trim():"";
+    if(su&&!nm) return showErr("Indiquez votre nom.");
+    if(!id) return showErr("Entrez un numéro de téléphone (8 chiffres) ou une adresse email.");
+    if(pw.length<6) return showErr("Le mot de passe doit contenir au moins 6 caractères.");
+    var go=$("#accGo"); go.disabled=true; go.textContent="Un instant…";
+    var ph=raw.indexOf("@")<0?phoneDigits(raw):"";
+    var p=su?sb.auth.signUp({email:id,password:pw,options:{data:{name:nm,phone:ph}}}):sb.auth.signInWithPassword({email:id,password:pw});
+    p.then(function(r){
+      go.disabled=false; go.textContent=su?"Créer mon compte":"Se connecter";
+      if(r.error) return showErr(authErr(r.error));
+      if(su&&!r.data.session){ accMode="login"; accMsg="Compte créé. Confirmez votre email puis connectez-vous."; accForm(); return; }
+      closeLayer(); toast(su?"Bienvenue chez "+S.shopName+" ✦":"Vous êtes connectée");
+    }).catch(function(e){ go.disabled=false; go.textContent=su?"Créer mon compte":"Se connecter"; showErr(authErr(e)); });
+  };
+}
+function newPassword(){
+  openLayer('<div class="dh"><h2>Nouveau mot de passe</h2><button class="x" data-close aria-label="Fermer">×</button></div><form class="db" id="npF"><div class="field"><label for="np">Nouveau mot de passe</label><input id="np" type="password" minlength="6" autocomplete="new-password"></div><p class="err" id="npE" hidden></p><button class="btn primary">Enregistrer</button></form>',"drawer");
+  $("#npF").onsubmit=function(e){ e.preventDefault(); var v=$("#np").value; if(v.length<6){ $("#npE").textContent="6 caractères minimum."; $("#npE").hidden=false; return; } sb.auth.updateUser({password:v}).then(function(r){ if(r.error){ $("#npE").textContent=authErr(r.error); $("#npE").hidden=false; } else { closeLayer(); toast("Mot de passe modifié"); } }); };
+}
+
+/* --- tableau des commandes (propriétaire) --- */
+var dash={filter:"nouvelle", list:[], timer:null};
+function openDashboard(){
+  if(!cloud.staff) return;
+  clearInterval(dash.timer);
+  function load(){
+    var q=sb.from("orders").select("*").order("created_at",{ascending:false}).limit(200);
+    if(dash.filter!=="toutes") q=q.eq("status",dash.filter);
+    return q.then(function(r){ dash.list=r.data||[]; draw(); refreshNew(); });
+  }
+  function draw(){
+    if(!layer.querySelector("#dash")) return;
+    var fmtD=function(t){ try{ return new Date(t).toLocaleString("fr-FR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }catch(e){ return ""; } };
+    var sum=dash.list.reduce(function(s,o){return s+(o.status!=="annulée"?o.total:0)},0);
+    $("#dashList").innerHTML = (dash.list.length?'<p class="note" style="margin:0">'+dash.list.length+' commande'+(dash.list.length>1?'s':'')+' · '+fcfa(sum)+'</p>':'')+(dash.list.length?dash.list.map(function(o){
+      var wa=o.phone?"https://wa.me/228"+phoneDigits(o.phone)+"?text="+encodeURIComponent("Bonjour "+o.name.split(" ")[0]+", ici "+S.shopName+" à propos de votre commande "+o.ref+"."):"";
+      return '<div class="order dorder"><div class="oh"><span class="ref-s gold-t">'+esc(o.ref)+'</span><span class="note">'+fmtD(o.created_at)+'</span></div>'+
+        '<div class="dcl"><b>'+esc(o.name)+'</b> · <a class="lnk" href="tel:+228'+esc(phoneDigits(o.phone))+'">'+esc(pretty(phoneDigits(o.phone)))+'</a>'+(wa?' · <a class="lnk" href="'+wa+'" target="_blank" rel="noopener">WhatsApp ↗</a>':'')+(o.user_id?' <span class="pill">Compte</span>':'')+'</div>'+
+        '<div class="note">'+(o.mode==="retrait"?"Retrait en boutique":"Livraison · "+esc(o.zone||"")+(o.area?" — "+esc(o.area):""))+'</div>'+
+        '<div class="note">'+(o.items||[]).map(function(it){return esc(it.name)+' ('+esc(it.size||"")+(it.color?", "+esc(it.color):"")+') ×'+it.qty}).join("<br>")+'</div>'+
+        '<div class="oh"><b class="num">'+fcfa(o.total)+'</b><span class="note">'+esc(o.pay||"")+(o.promo?' · '+esc(o.promo):'')+'</span></div>'+
+        '<div class="field"><label class="sr" for="st-'+o.id+'">Statut</label><select id="st-'+o.id+'" data-st="'+o.id+'" class="stsel st-'+STATUS.indexOf(o.status)+'">'+STATUS.map(function(s){return '<option value="'+s+'" '+(s===o.status?"selected":"")+'>'+STATUS_LBL[s]+'</option>'}).join("")+'</select></div></div>';
+    }).join(""):'<div class="empty">Aucune commande '+(dash.filter==="toutes"?"pour le moment":"« "+esc(STATUS_LBL[dash.filter])+" »")+'.</div>');
+    layer.querySelectorAll("[data-st]").forEach(function(s){ s.onchange=function(){ var id=+s.dataset.st, v=s.value; s.disabled=true; sb.from("orders").update({status:v}).eq("id",id).then(function(r){ s.disabled=false; if(r.error){ toast("Modification impossible"); return; } toast("Statut : "+STATUS_LBL[v]); load(); }); }; });
+  }
+  openLayer('<div class="dh"><h2>Commandes</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db" id="dash">'+
+    '<div class="chips dchips">'+["nouvelle","confirmée","payée","en livraison","livrée","annulée","toutes"].map(function(s){return '<button data-df="'+s+'" aria-pressed="'+(dash.filter===s)+'">'+(s==="toutes"?"Toutes":STATUS_LBL[s])+'</button>'}).join("")+'</div>'+
+    '<div id="dashList"><div class="empty">Chargement…</div></div></div>'+
+    '<div class="df"><button class="btn ghost" id="dashSell">Gérer les articles</button></div>',"drawer");
+  layer.querySelectorAll("[data-df]").forEach(function(b){ b.onclick=function(){ dash.filter=b.dataset.df; layer.querySelectorAll("[data-df]").forEach(function(x){x.setAttribute("aria-pressed",x===b)}); load(); }; });
+  $("#dashSell").onclick=function(){ closeLayer(); tab="items"; openSeller(); };
+  load(); dash.timer=setInterval(function(){ if(layer.querySelector("#dash")) load(); else clearInterval(dash.timer); },30000);
+}
+
+if(sb){
+  $("#accBtn").onclick=function(){ openAccount(); };
+  sb.auth.onAuthStateChange(function(ev,session){ if(ev==="PASSWORD_RECOVERY"){ onSession(session); setTimeout(newPassword,300); return; } setTimeout(function(){ onSession(session); },0); });
+  sb.auth.getSession().then(function(r){ onSession(r.data.session); });
+  setInterval(refreshNew,60000);
+}
+accLabel();
+
+cloudLoad().then(function(ok){ if(!ok&&sb) fetch("data/shop.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(d){ if(d&&d.products&&(d.rev||0)>=(DATA.rev||0)){ DATA=d; boot(); deepLink(); } }).catch(function(){}); });
 
 /* ===== v3 : recherche suggestive, installation, animations ===== */
 (function v3(){

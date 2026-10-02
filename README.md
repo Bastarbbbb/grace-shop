@@ -58,3 +58,13 @@ Apple refuse souvent les applications qui ne sont qu'un site web. Pour être acc
 ## Limite actuelle
 
 L'espace vendeur (publier, modifier, ajouter des photos depuis l'application) fonctionne dans la version hébergée sur Claude. Sur GitHub Pages, le catalogue se modifie dans `data/shop.json`. Pour publier depuis le téléphone sur la version en ligne, il faudra brancher une base de données (Supabase ou Firebase).
+
+## Comptes, espace propriétaire et commandes (Supabase)
+
+1. Créez un projet gratuit sur https://supabase.com.
+2. Dans **SQL Editor**, collez le contenu de `supabase/schema.sql` (en remplaçant `__OWNER_EMAIL__` par l'email de la propriétaire), puis **Run**.
+3. Dans **Authentication → Sign In / Providers → Email**, désactivez **Confirm email** (les clientes s'inscrivent avec leur numéro).
+4. Dans **Authentication → URL Configuration**, mettez `https://grace-shop.github.io` comme **Site URL**.
+5. Mettez la **Project URL** et la clé **anon public** dans `config.js`.
+
+La propriétaire crée ensuite son compte sur le site (bouton « Se connecter » → « Nouveau compte ») avec cet email : elle obtient l'espace vendeur et le tableau des commandes.
