@@ -1,5 +1,5 @@
 name: APK Android
-# Construit l APK signé et le publie dans Releases.
+# Construit l APK signé et le publie dans Releases (Grace Shop).
 
 on:
   push:
