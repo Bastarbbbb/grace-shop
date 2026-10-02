@@ -2150,7 +2150,7 @@ function checkAutopay(){
   fetch(CFG.url+"/functions/v1/pay?action=config",{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.key},body:"{}"}).then(function(r){ return r.ok?r.json():{}; }).then(function(r){ cloud.autopay=!!(r&&r.auto); applyShop(); }).catch(function(){});
 }
 function payChip(o){
-  var ps=o.pay_status||"en attente";
+  var ps=o.pay_status||((o.status==="payée"||o.status==="livrée")?"payé":"en attente");
   if(ps==="payé") return '<span class="paychip ok">Payé'+(o.pay_method?' · '+esc(o.pay_method):'')+'</span>';
   if(ps==="déclaré") return '<span class="paychip wait">Paiement déclaré'+(o.pay_ref?' · code '+esc(o.pay_ref):'')+'</span>';
   if(ps==="en cours") return '<span class="paychip wait">Paiement en cours</span>';
@@ -2253,11 +2253,16 @@ function openDashboard(){
         '<div class="note">'+(o.mode==="retrait"?"Retrait en boutique":"Livraison · "+esc(o.zone||"")+(o.area?" — "+esc(o.area):""))+'</div>'+
         '<div class="note">'+(o.items||[]).map(function(it){return esc(it.name)+' ('+esc(it.size||"")+(it.color?", "+esc(it.color):"")+') ×'+it.qty}).join("<br>")+'</div>'+
         '<div class="oh"><b class="num">'+fcfa(o.total)+'</b>'+payChip(o)+'</div>'+(o.promo?'<div class="note">Code promo '+esc(o.promo)+'</div>':'')+
-        (o.pay_status!=="payé"&&o.status!=="annulée"?'<button class="btn ghost paidbtn" data-paid="'+o.id+'">✓ Paiement reçu</button>':'')+
+        (o.pay_status!=="payé"&&o.status!=="annulée"&&o.status!=="payée"&&o.status!=="livrée"?'<button class="btn ghost paidbtn" data-paid="'+o.id+'">✓ Paiement reçu</button>':'')+
         '<div class="field"><label class="sr" for="st-'+o.id+'">Statut</label><select id="st-'+o.id+'" data-st="'+o.id+'" class="stsel st-'+STATUS.indexOf(o.status)+'">'+STATUS.map(function(s){return '<option value="'+s+'" '+(s===o.status?"selected":"")+'>'+STATUS_LBL[s]+'</option>'}).join("")+'</select></div></div>';
     }).join(""):'<div class="empty">Aucune commande '+(dash.filter==="toutes"?"pour le moment":"« "+esc(STATUS_LBL[dash.filter])+" »")+'.</div>');
-    layer.querySelectorAll("[data-paid]").forEach(function(b){ b.onclick=function(){ var id=+b.dataset.paid, o=dash.list.find(function(x){return x.id===id}); b.disabled=true; sb.from("orders").update({pay_status:"payé",paid_at:new Date().toISOString(),status:o&&(o.status==="nouvelle"||o.status==="confirmée")?"payée":(o?o.status:"payée")}).eq("id",id).then(function(r){ if(r.error){ b.disabled=false; toast("Modification impossible"); return; } toast("Paiement enregistré ✓"); load(); }); }; });
-    layer.querySelectorAll("[data-st]").forEach(function(s){ s.onchange=function(){ var id=+s.dataset.st, v=s.value; s.disabled=true; sb.from("orders").update({status:v}).eq("id",id).then(function(r){ s.disabled=false; if(r.error){ toast("Modification impossible"); return; } toast("Statut : "+STATUS_LBL[v]); load(); }); }; });
+    layer.querySelectorAll("[data-paid]").forEach(function(b){ b.onclick=function(){ var id=+b.dataset.paid, o=dash.list.find(function(x){return x.id===id}); b.disabled=true; var st=o&&(o.status==="nouvelle"||o.status==="confirmée")?"payée":(o?o.status:"payée");
+      sb.from("orders").update({pay_status:"payé",paid_at:new Date().toISOString(),status:st}).eq("id",id).then(function(r){
+        // base pas encore mise à jour : on enregistre au moins le statut « Payée »
+        if(r.error&&/column|schema cache/i.test(r.error.message||"")) return sb.from("orders").update({status:st}).eq("id",id);
+        return r;
+      }).then(function(r){ if(r.error){ b.disabled=false; toast("Modification impossible : reconnectez-vous puis réessayez"); return; } toast("Paiement enregistré ✓"); load(); }); }; });
+    layer.querySelectorAll("[data-st]").forEach(function(s){ s.onchange=function(){ var id=+s.dataset.st, v=s.value; s.disabled=true; sb.from("orders").update({status:v}).eq("id",id).then(function(r){ s.disabled=false; if(r.error){ toast("Modification impossible : reconnectez-vous puis réessayez"); return; } toast("Statut : "+STATUS_LBL[v]); load(); }); }; });
   }
   openLayer('<div class="dh"><h2>Commandes</h2><button class="x" data-close aria-label="Fermer">×</button></div><div class="db" id="dash">'+
     '<div class="chips dchips">'+["nouvelle","confirmée","payée","en livraison","livrée","annulée","toutes"].map(function(s){return '<button data-df="'+s+'" aria-pressed="'+(dash.filter===s)+'">'+(s==="toutes"?"Toutes":STATUS_LBL[s])+'</button>'}).join("")+'</div>'+
