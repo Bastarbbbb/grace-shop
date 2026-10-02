@@ -250,7 +250,7 @@ footer{border-top:1px solid var(--line-2);padding-block:40px 30px;color:var(--mu
 .tabbar{display:none}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr;min-height:0;padding-top:16px;gap:0}
-  .stage{order:-1;aspect-ratio:1/1.08;max-height:430px;margin-bottom:18px}
+  .stage{order:-1;aspect-ratio:1/1.08;max-height:430px;margin-bottom:26px}
   .caption{display:none}
   .pillars{grid-template-columns:1fr 1fr}
   .pillar:nth-child(3){border-left:0}
@@ -2418,6 +2418,6 @@ if(window.claude&&claude.use){
 
 
 <script>if(/GraceShopApp|iPhone|iPad/.test(navigator.userAgent)){var b=document.getElementById("apkBox");if(b)b.hidden=true}</script>
-<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
+<script>if("serviceWorker" in navigator){var hadSW=!!navigator.serviceWorker.controller,swReloaded=false;navigator.serviceWorker.addEventListener("controllerchange",function(){if(hadSW&&!swReloaded){swReloaded=true;location.reload();}});window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(r){r.update();}).catch(function(){})})}</script>
 </body>
 </html>
