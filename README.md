@@ -62,7 +62,7 @@ L'espace vendeur (publier, modifier, ajouter des photos depuis l'application) fo
 ## Comptes, espace propriétaire et commandes (Supabase)
 
 1. Créez un projet gratuit sur https://supabase.com.
-2. Dans **SQL Editor**, collez le contenu de `supabase/schema.sql` (en remplaçant `__OWNER_EMAIL__` par l'email de la propriétaire), puis **Run**.
+2. Dans **SQL Editor**, collez le contenu de `supabase/schema.sql` , puis **Run**.
 3. Dans **Authentication → Sign In / Providers → Email**, désactivez **Confirm email** (les clientes s'inscrivent avec leur numéro).
 4. Dans **Authentication → URL Configuration**, mettez `https://grace-shop.github.io` comme **Site URL**.
 5. Mettez la **Project URL** et la clé **anon public** dans `config.js`.
