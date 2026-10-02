@@ -236,6 +236,7 @@ pre.msg{white-space:pre-wrap;word-break:break-word;background:var(--bg2);border:
 .banner .btn{padding:8px 14px;font-size:.82rem}
 
 /* footer */
+.apkbtn{display:inline-block;margin-top:6px;padding:10px 18px;border-radius:999px;background:linear-gradient(135deg,#F5D97A,#B8862B);color:#0B0907;font-weight:600;font-size:.85rem;text-decoration:none}
 footer{border-top:1px solid var(--line-2);padding-block:40px 30px;color:var(--muted);font-size:.86rem}
 .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:28px}
 .fgrid h5{margin:0 0 10px;font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
@@ -632,6 +633,7 @@ footer{border-top:1px solid var(--line-2);padding-block:40px 30px;color:var(--mu
     <div class="fgrid">
       <div><div class="brand"><svg style="width:38px;height:38px" aria-hidden="true"><use href="#logo"/></svg><div class="wordmark"><i id="footName">Grace</i><small>SHOP · LOMÉ</small></div></div><p class="fslogan" id="footSlogan">Portez la grâce.</p></div>
       <div><h5>Contact</h5><p id="footWa"></p><p id="footCity">Lomé, Togo</p></div>
+      <div id="apkBox"><h5>Application Android</h5><p>Installez Grace Shop sur votre téléphone.</p><a class="apkbtn" href="https://github.com/Bastarbbbb/grace-shop/releases/latest/download/grace-shop.apk" rel="noopener">Télécharger l'APK</a></div>
       <div><h5>Paiements acceptés</h5><div class="paychips"><span>T-Money</span><span id="floozChip" hidden>Flooz</span><span>À la livraison</span></div></div>
     </div>
     <div class="legal"><span id="copy">© 2026 Grace Shop</span><span>Prix en francs CFA (FCFA)</span></div>
@@ -1628,6 +1630,7 @@ if(window.claude&&claude.use){
 </script>
 
 
+<script>if(/GraceShopApp|iPhone|iPad/.test(navigator.userAgent)){var b=document.getElementById("apkBox");if(b)b.hidden=true}</script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}</script>
 </body>
 </html>
