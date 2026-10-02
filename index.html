@@ -735,6 +735,26 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 .cf-info>div{border:1px solid var(--line-2);border-radius:16px;padding:12px 14px}
 .cf-info p{margin:6px 0 0;font-size:.88rem;line-height:1.45}
 @media (max-width:400px){.cf-info{grid-template-columns:1fr}}
+
+/* ===== ciel étoilé : fond transparent qui brille ===== */
+html{background:#07060A}
+body{background:transparent!important;background-image:none!important}
+.sky{position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+  radial-gradient(1100px 700px at 85% -10%,rgba(122,46,96,.38),transparent 60%),
+  radial-gradient(900px 600px at -10% 35%,rgba(217,178,111,.10),transparent 60%),
+  radial-gradient(1200px 800px at 50% 115%,rgba(60,24,70,.45),transparent 60%),
+  linear-gradient(180deg,#0A0810 0%,#07060A 55%,#0B0710 100%)}
+.sky::after{content:"";position:absolute;inset:-20%;background:conic-gradient(from 200deg at 60% 40%,transparent 0 30%,rgba(242,217,166,.05) 40%,transparent 52%,rgba(199,125,168,.06) 70%,transparent 82%);filter:blur(40px);animation:aurora 28s ease-in-out infinite alternate}
+@keyframes aurora{to{transform:rotate(25deg) scale(1.15)}}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+:root{--card:rgba(24,20,28,.55);--bg2:rgba(20,17,24,.6)}
+header.top{background:rgba(10,8,14,.55)}
+header.top.scrolled{background:rgba(10,8,14,.72)}
+.drawer{background:rgba(16,13,20,.82);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%)}
+.modal{background:rgba(16,13,20,.86);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%)}
+.tabbar{background:rgba(10,8,14,.7)!important}
+.field input,.field select,.field textarea,.promo input,select.sort,.telrow{background:rgba(255,255,255,.04)}
+.zone-sel option,select option{background:#141118}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none;filter:none}}
 </style>
 
@@ -2322,6 +2342,40 @@ accLabel();
 
 cloudLoad().then(function(ok){ if(!ok&&sb) fetch("data/shop.json",{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(d){ if(d&&d.products&&(d.rev||0)>=(DATA.rev||0)){ DATA=d; boot(); deepLink(); } }).catch(function(){}); });
 
+
+/* ciel étoilé animé : scintillement doré et blanc, étoiles filantes */
+(function sky(){
+  var bg=document.createElement("div"); bg.className="sky"; document.body.prepend(bg);
+  var c=document.createElement("canvas"); c.id="stars"; c.setAttribute("aria-hidden","true"); document.body.prepend(c);
+  var ctx=c.getContext("2d"), W=0,H=0,dpr=Math.min(2,window.devicePixelRatio||1), stars=[], shoots=[], run=true;
+  function size(){ W=innerWidth; H=innerHeight; c.width=W*dpr; c.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    var n=Math.round(Math.min(220,W*H/7000)); stars=[];
+    for(var i=0;i<n;i++){ var big=Math.random()<.08; stars.push({x:Math.random()*W,y:Math.random()*H,r:big?1.2+Math.random()*1.1:.35+Math.random()*.8,a:Math.random()*6.28,s:.004+Math.random()*.02,g:Math.random()<.45,big:big,dz:.02+Math.random()*.08}); } }
+  size(); addEventListener("resize",size);
+  function star(x,y,r,al,gold,big){
+    ctx.globalAlpha=al; ctx.fillStyle=gold?"#F2D9A6":"#FFFFFF";
+    ctx.beginPath(); ctx.arc(x,y,r,0,6.283); ctx.fill();
+    if(big&&al>.55){ ctx.globalAlpha=al*.5; ctx.strokeStyle=gold?"rgba(242,217,166,.8)":"rgba(255,255,255,.8)"; ctx.lineWidth=.6;
+      var L=r*5*al; ctx.beginPath(); ctx.moveTo(x-L,y); ctx.lineTo(x+L,y); ctx.moveTo(x,y-L); ctx.lineTo(x,y+L); ctx.stroke(); }
+  }
+  var last=0, sy=0;
+  function frame(t){
+    if(!run) return;
+    var dt=Math.min(50,t-last||16); last=t; ctx.clearRect(0,0,W,H);
+    var scroll=window.scrollY||0, par=(scroll-sy); sy=scroll;
+    for(var i=0;i<stars.length;i++){ var s=stars[i]; s.a+=s.s*dt*.06; s.y-=par*s.dz; if(s.y<-4) s.y+=H+8; if(s.y>H+4) s.y-=H+8;
+      var al=.25+.75*Math.pow(.5+.5*Math.sin(s.a),2); star(s.x,s.y,s.r,al,s.g,s.big); }
+    if(Math.random()<.004&&shoots.length<2) shoots.push({x:Math.random()*W*.8+W*.2,y:Math.random()*H*.4,vx:-(6+Math.random()*4),vy:2.2+Math.random()*1.5,l:1});
+    shoots=shoots.filter(function(m){ m.x+=m.vx*dt*.06; m.y+=m.vy*dt*.06; m.l-=.012*dt*.06;
+      var g=ctx.createLinearGradient(m.x,m.y,m.x-m.vx*14,m.y-m.vy*14); g.addColorStop(0,"rgba(255,244,214,"+Math.max(0,m.l)+")"); g.addColorStop(1,"rgba(255,244,214,0)");
+      ctx.globalAlpha=1; ctx.strokeStyle=g; ctx.lineWidth=1.4; ctx.beginPath(); ctx.moveTo(m.x,m.y); ctx.lineTo(m.x-m.vx*14,m.y-m.vy*14); ctx.stroke();
+      return m.l>0&&m.x>-200&&m.y<H+200; });
+    ctx.globalAlpha=1; requestAnimationFrame(frame);
+  }
+  if(reduce){ last=0; frame(16); run=false; return; }
+  document.addEventListener("visibilitychange",function(){ var was=run; run=!document.hidden; if(run&&!was) requestAnimationFrame(frame); });
+  requestAnimationFrame(frame);
+})();
 /* ===== v3 : recherche suggestive, installation, animations ===== */
 (function v3(){
   var inApp=/GraceShopApp/.test(navigator.userAgent), standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone;
