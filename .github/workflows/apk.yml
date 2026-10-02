@@ -1,4 +1,5 @@
 name: APK Android
+# Construit l APK signé et le publie dans Releases.
 
 on:
   push:
