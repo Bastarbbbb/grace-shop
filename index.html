@@ -625,6 +625,11 @@ header.top.scrolled .top-row,header.top.scrolled>.wrap{padding-block:8px}
 .stsel{font-weight:700}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 #accN{position:absolute;top:-6px;right:-6px}
+.seg-sm button{padding:9px;font-size:.9rem}
+.telrow{display:flex;align-items:stretch;border:1px solid var(--line-2);background:var(--bg2);border-radius:12px;overflow:hidden}
+.telrow:focus-within{border-color:var(--gold)}
+.telrow span{display:grid;place-items:center;padding:0 12px;color:var(--gold-hi);font-weight:700;border-right:1px solid var(--line-2)}
+.field .telrow input{border:0;border-radius:0;background:transparent}
 .team-it{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line-2);border-radius:14px;padding:10px 12px}
 .team-it div{display:flex;flex-direction:column}
 .team-it .btn{padding:8px 14px;font-size:.8rem}
@@ -1873,7 +1878,7 @@ function cloudOrder(o){
 }
 
 /* --- fenêtre « Mon compte » --- */
-var accMode="login", accMsg="";
+var accMode="login", accMsg="", accVia="email";
 function openAccount(view){
   if(!sb){ openOrders(); return; }
   if(!cloud.user) return accForm();
@@ -1909,7 +1914,9 @@ function accForm(){
     '<div class="seg" role="tablist"><button type="button" role="tab" aria-selected="'+!su+'" data-am="login">Connexion</button><button type="button" role="tab" aria-selected="'+su+'" data-am="signup">Nouveau compte</button></div>'+
     '<p class="note" style="margin:0">'+(su?"Retrouvez vos commandes, vos favoris et vos points Grace Club sur tous vos appareils.":"Heureuse de vous revoir !")+'</p>'+
     (su?'<div class="field"><label for="f-name">Nom complet</label><input id="f-name" autocomplete="name" required></div>':'')+
-    '<div class="field"><label for="f-id">Numéro de téléphone ou email</label><input id="f-id" autocomplete="username" inputmode="email" placeholder="90 12 34 56" required></div>'+
+    '<div><div class="lbl">'+(su?"S'inscrire avec":"Se connecter avec")+'</div><div class="seg seg-sm" role="tablist"><button type="button" role="tab" aria-selected="'+(accVia==="email")+'" data-via="email">✉ Email</button><button type="button" role="tab" aria-selected="'+(accVia==="tel")+'" data-via="tel">☏ Téléphone</button></div></div>'+
+    (accVia==="email"?'<div class="field"><label for="f-id">Adresse email</label><input id="f-id" type="email" autocomplete="email" inputmode="email" placeholder="exemple@gmail.com" required></div>'
+      :'<div class="field"><label for="f-id">Numéro de téléphone</label><div class="telrow"><span>+228</span><input id="f-id" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="90 12 34 56" required></div></div>')+
     '<div class="field"><label for="f-pw">Mot de passe</label><input id="f-pw" type="password" autocomplete="'+(su?"new-password":"current-password")+'" minlength="6" required>'+(su?'<small class="note">6 caractères minimum.</small>':'')+'</div>'+
     '<p class="err" id="accErr"'+(accMsg?'':' hidden')+'>'+esc(accMsg)+'</p>'+
     '<button class="btn primary" id="accGo" type="submit">'+(su?"Créer mon compte":"Se connecter")+'</button>'+
@@ -1918,16 +1925,18 @@ function accForm(){
     '</form>',"drawer");
   accMsg="";
   layer.querySelectorAll("[data-am]").forEach(function(b){ b.onclick=function(){ accMode=b.dataset.am; accForm(); }; });
-  var fg=$("#forgot"); if(fg) fg.onclick=function(){ var id=$("#f-id").value.trim(); if(id.indexOf("@")<0){ showErr("Indiquez d'abord votre email ci-dessus."); return; } sb.auth.resetPasswordForEmail(id,{redirectTo:location.origin+location.pathname}).then(function(r){ toast(r.error?"Envoi impossible pour le moment":"Lien envoyé : regardez vos emails"); }); };
+  layer.querySelectorAll("[data-via]").forEach(function(b){ b.onclick=function(){ var keep={n:$("#f-name")&&$("#f-name").value,pw:$("#f-pw").value}; accVia=b.dataset.via; accForm(); if(keep.n&&$("#f-name")) $("#f-name").value=keep.n; $("#f-pw").value=keep.pw||""; $("#f-id").focus(); }; });
+  var fg=$("#forgot"); if(fg) fg.onclick=function(){ var id=$("#f-id").value.trim(); if(accVia!=="email"||id.indexOf("@")<0){ accVia="email"; accForm(); showErr2("Choisissez « Email », entrez votre adresse puis touchez « recevez un lien »."); return; } sb.auth.resetPasswordForEmail(id,{redirectTo:location.origin+location.pathname}).then(function(r){ toast(r.error?"Envoi impossible pour le moment":"Lien envoyé : regardez vos emails"); }); };
   function showErr(t){ var e=$("#accErr"); e.textContent=t; e.hidden=false; }
+  function showErr2(t){ var e=$("#accErr"); if(e){ e.textContent=t; e.hidden=false; } }
   $("#accF").onsubmit=function(ev){
     ev.preventDefault();
-    var raw=$("#f-id").value, id=loginId(raw), pw=$("#f-pw").value, nm=su?$("#f-name").value.trim():"";
+    var raw=$("#f-id").value.trim(), id=accVia==="email"?(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw)?raw.toLowerCase():""):(phoneDigits(raw).length>=8?loginId(phoneDigits(raw)):""), pw=$("#f-pw").value, nm=su?$("#f-name").value.trim():"";
     if(su&&!nm) return showErr("Indiquez votre nom.");
-    if(!id) return showErr("Entrez un numéro de téléphone (8 chiffres) ou une adresse email.");
+    if(!id) return showErr(accVia==="email"?"Entrez une adresse email valide, par exemple exemple@gmail.com.":"Entrez votre numéro à 8 chiffres, par exemple 90 12 34 56.");
     if(pw.length<6) return showErr("Le mot de passe doit contenir au moins 6 caractères.");
     var go=$("#accGo"); go.disabled=true; go.textContent="Un instant…";
-    var ph=raw.indexOf("@")<0?phoneDigits(raw):"";
+    var ph=accVia==="tel"?phoneDigits(raw):"";
     var p=su?sb.auth.signUp({email:id,password:pw,options:{data:{name:nm,phone:ph}}}):sb.auth.signInWithPassword({email:id,password:pw});
     p.then(function(r){
       go.disabled=false; go.textContent=su?"Créer mon compte":"Se connecter";
