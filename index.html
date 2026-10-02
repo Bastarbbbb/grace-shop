@@ -250,7 +250,7 @@ footer{border-top:1px solid var(--line-2);padding-block:40px 30px;color:var(--mu
 .tabbar{display:none}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr;min-height:0;padding-top:16px;gap:0}
-  .stage{order:-1;aspect-ratio:1/1;max-height:400px;margin-bottom:-20px}
+  .stage{order:-1;aspect-ratio:1/1.08;max-height:430px;margin-bottom:18px}
   .caption{display:none}
   .pillars{grid-template-columns:1fr 1fr}
   .pillar:nth-child(3){border-left:0}
@@ -926,15 +926,25 @@ function hero3D(){
   var scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(34,1,.1,100); cam.position.set(0,.2,9.5);
   scene.environment=makeEnv(r);
   scene.add(new THREE.HemisphereLight(0xFFE9D0,0x2A1018,.35));
-  var key=new THREE.DirectionalLight(0xFFF1E0,1.6); key.position.set(3,5,6); scene.add(key);
-  var rim=new THREE.PointLight(0xFF2A4A,3.4,30); rim.position.set(-5,2,-3); scene.add(rim);
+  var key=new THREE.DirectionalLight(0xFFF1E0,1.5); key.position.set(6,4,3); scene.add(key);
+  var rim=new THREE.PointLight(0xFF3355,4,30); rim.position.set(-5,2.5,-2);
+  var soft=new THREE.DirectionalLight(0xFFE0E6,.55); soft.position.set(-4,3,6); scene.add(soft); scene.add(rim);
   var rim2=new THREE.PointLight(0xF2D9A6,2.2,30); rim2.position.set(5,1,-2); scene.add(rim2);
   var fill=new THREE.PointLight(0xD9B26F,.9,30); fill.position.set(2,-3,5); scene.add(fill);
 
   var root=new THREE.Group(); scene.add(root);
   var gold=new THREE.MeshStandardMaterial({color:0xE9B65A,metalness:1,roughness:.16,emissive:0x2a1a06,emissiveIntensity:.35});
   // satin rouge : reflets nacrés, vernis léger, éclat rosé sur les bords
-  var satin=new THREE.MeshPhysicalMaterial({color:new THREE.Color(0x8C0A1F).convertSRGBToLinear(),roughness:.3,metalness:0,clearcoat:.35,clearcoatRoughness:.3,side:THREE.DoubleSide,envMapIntensity:.45});
+  // relief du tissu : fines ondulations de satin et plis verticaux (carte de normales générée)
+  function satinNormals(){
+    var W=512,H=512,c=document.createElement("canvas"); c.width=W; c.height=H; var g=c.getContext("2d"), img=g.createImageData(W,H), h=new Float32Array(W*H);
+    for(var y=0;y<H;y++) for(var x=0;x<W;x++){ var u=x/W*Math.PI*2, v=y/H*Math.PI*2;
+      h[y*W+x]=Math.sin(u*3+Math.sin(v)*1.2)*.55+Math.sin(u*7+v*.6+Math.sin(v*2)*.8)*.3+Math.sin(u*17+v*1.7)*.08+Math.sin(u*41+v*5)*.025; }
+    for(var y2=0;y2<H;y2++) for(var x2=0;x2<W;x2++){ var i=y2*W+x2, dx=h[y2*W+(x2+1)%W]-h[y2*W+(x2-1+W)%W], dy=h[((y2+1)%H)*W+x2]-h[((y2-1+H)%H)*W+x2];
+      var nx=-dx*6, ny=-dy*6, nz=1, l=Math.sqrt(nx*nx+ny*ny+nz*nz); img.data[i*4]=(nx/l*.5+.5)*255; img.data[i*4+1]=(ny/l*.5+.5)*255; img.data[i*4+2]=(nz/l*.5+.5)*255; img.data[i*4+3]=255; }
+    g.putImageData(img,0,0); var tx=new THREE.CanvasTexture(c); tx.wrapS=tx.wrapT=THREE.RepeatWrapping; tx.repeat.set(3,1); return tx;
+  }
+  var satin=new THREE.MeshPhysicalMaterial({color:new THREE.Color(0x860A1C).convertSRGBToLinear(),roughness:.4,metalness:0,clearcoat:.18,clearcoatRoughness:.45,side:THREE.DoubleSide,envMapIntensity:.5,normalMap:satinNormals(),normalScale:new THREE.Vector2(.55,.55)});
   try{ satin.sheen=new THREE.Color(0x7A1426).convertSRGBToLinear(); }catch(e){}
   var velvet=new THREE.MeshStandardMaterial({color:0x050406,roughness:.9,metalness:0,envMapIntensity:.25});
   function lathe(pts,seg){ return new THREE.LatheGeometry(pts.map(function(p){return new THREE.Vector2(p[0],p[1])}),seg); }
@@ -952,21 +962,28 @@ function hero3D(){
     if(by>1.3){ var th=Math.atan2(bx,bz), front=Math.max(0,Math.cos(th)); var dip=Math.pow(front,6)*.12 - Math.pow(Math.abs(Math.sin(th*2))*front,2)*.04; bp.setY(b,by-dip*((by-1.3)/.13)); } }
   bodiceG.computeVertexNormals();
   var bodice=new THREE.Mesh(bodiceG,satin); bodice.scale.set(1.12,1,.74); root.add(bodice);
-  // drapé croisé sur le bustier
-  [-1,1].forEach(function(sd){
-    var c=new THREE.CatmullRomCurve3([new THREE.Vector3(.5*sd,1.3,.12),new THREE.Vector3(.22*sd,1.05,.36),new THREE.Vector3(-.05*sd,.78,.33),new THREE.Vector3(-.28*sd,.6,.25)]);
-    root.add(new THREE.Mesh(new THREE.TubeGeometry(c,40,.035,10,false),satin));
-  });
-
+  // bordure froncée du décolleté
+  var hem=new THREE.Mesh(new THREE.TorusGeometry(.47,.018,10,120),satin); hem.rotation.x=Math.PI/2; hem.position.y=1.4; hem.scale.set(1.12,.74,1); root.add(hem);
   // jupe longue évasée avec plis vivants et légère traîne
-  var skirtG=lathe([[.36,.64],[.42,.5],[.56,.22],[.74,-.2],[.94,-.75],[1.15,-1.4],[1.36,-2.05],[1.55,-2.5],[1.62,-2.6]],160);
+  var skirtG=lathe(new THREE.SplineCurve([[.36,.64],[.42,.5],[.56,.22],[.74,-.2],[.94,-.75],[1.15,-1.4],[1.36,-2.05],[1.55,-2.5],[1.62,-2.6]].map(function(p){return new THREE.Vector2(p[0],p[1])})).getPoints(70).map(function(v){return [v.x,v.y]}),180);
   skirtG=new THREE.BufferGeometry().copy(skirtG);
   var sp=skirtG.attributes.position, sBase=sp.array.slice();
   var skirt=new THREE.Mesh(skirtG,satin); root.add(skirt);
   // fente côté jambe : simple ombre dorée suggérée par la ceinture
   var belt=new THREE.Mesh(new THREE.TorusGeometry(.375,.03,16,96),gold); belt.rotation.x=Math.PI/2; belt.position.y=.6; belt.scale.set(1.12,.74,1); root.add(belt);
+  // écharpe de satin qui tombe en cascade sur la hanche
+  (function(){
+    var N=60, W=.16, pos=[], idx=[], uv=[];
+    for(var k=0;k<=N;k++){ var f=k/N, y=.58-f*2.6, rad=(.42+f*1.05)*1.03+.02, th=.85+f*.35+Math.sin(f*7)*.06;
+      var cx=Math.sin(th)*rad*1.0, cz=Math.cos(th)*rad*.82, w=W*(1-f*.35)+Math.sin(f*9)*.02;
+      var tx=Math.cos(th)*w, tz=-Math.sin(th)*w*.82;
+      pos.push(cx-tx,y,cz-tz, cx+tx,y-(f*.04),cz+tz); uv.push(0,f,1,f);
+      if(k<N){ var a=k*2; idx.push(a,a+1,a+2, a+1,a+3,a+2); } }
+    var g=new THREE.BufferGeometry(); g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3)); g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2)); g.setIndex(idx); g.computeVertexNormals();
+    var sash=new THREE.Mesh(g,satin); root.add(sash); root.userData.sash=sash;
+  })();
   var brooch=new THREE.Mesh(new THREE.OctahedronGeometry(.07,0),new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:0,transmission:.6,clearcoat:1,envMapIntensity:3}));
-  brooch.position.set(0,.6,.3); root.add(brooch);
+  brooch.position.set(.29,.6,.2); root.add(brooch);
   // socle doré
   var base=new THREE.Mesh(new THREE.CylinderGeometry(1.85,1.95,.06,96),new THREE.MeshStandardMaterial({color:0x050406,metalness:0,roughness:.5,envMapIntensity:.2})); base.position.y=-2.66; root.add(base);
   var baseRing=new THREE.Mesh(new THREE.TorusGeometry(1.9,.022,12,160),gold); baseRing.rotation.x=Math.PI/2; baseRing.position.y=-2.63; root.add(baseRing);
@@ -996,7 +1013,7 @@ function hero3D(){
     var b=stage.getBoundingClientRect(); tx=((e.clientX-b.left)/b.width-.5)*.5; ty=((e.clientY-b.top)/b.height-.5)*.25;
     if(drag){vel=(e.clientX-lx)*.008;spin+=vel;lx=e.clientX}
   });
-  function size(){var b=stage.getBoundingClientRect();r.setSize(b.width,b.height,false);cam.aspect=b.width/Math.max(1,b.height);cam.position.z=cam.aspect<1?12.5:10.6;cam.updateProjectionMatrix()}
+  function size(){var b=stage.getBoundingClientRect();r.setSize(b.width,b.height,false);cam.aspect=b.width/Math.max(1,b.height);cam.position.z=cam.aspect<.97?11.2:10.2;cam.position.y=-.1;cam.updateProjectionMatrix()}
   size(); window.addEventListener("resize",size);
   var visible=true;
   if("IntersectionObserver" in window) new IntersectionObserver(function(es){visible=es[0].isIntersecting}).observe(stage);
@@ -1005,7 +1022,7 @@ function hero3D(){
     var t=(now-t0)/1000, pos=sp.array;
     for(var k=0;k<pos.length;k+=3){
       var x0=sBase[k], y0=sBase[k+1], z0=sBase[k+2], f=Math.max(0,(.64-y0)/3.24), th=Math.atan2(x0,z0);
-      var pleat=1+(Math.sin(th*11+t*1.2)*.045+Math.sin(th*5-t*.8)*.03)*f + Math.sin(t*1.5+y0*1.3)*.025*f;
+      var pleat=1+(Math.sin(th*9+t*1.1)*.05+Math.sin(th*14+1.3-t*.7)*.025+Math.sin(th*4-t*.6)*.03)*f + Math.sin(t*1.4+y0*1.3+th*2)*.02*f;
       var back=Math.max(0,-Math.cos(th)); var train=1+back*back*.22*f*f;
       pos[k]=x0*pleat*train*1.0; pos[k+2]=z0*pleat*train*.82; pos[k+1]=y0-back*back*.12*f*f;
     }
