@@ -33,6 +33,8 @@ jobs:
             echo "::error::Ajoutez les secrets GS_KEYSTORE_B64 et GS_STORE_PASS (Settings > Secrets and variables > Actions)."
             exit 1
           fi
+          echo "Longueur GS_KEYSTORE_B64 : $(printf '%s' "$GS_KEYSTORE_B64" | tr -cd 'A-Za-z0-9+/=' | wc -c) (attendu 3560)"
+          echo "Longueur GS_STORE_PASS : $(printf '%s' "$GS_STORE_PASS" | tr -d '[:space:]' | wc -c) (attendu 24)"
           printf '%s' "$GS_KEYSTORE_B64" | tr -cd 'A-Za-z0-9+/=' | base64 -d > "$RUNNER_TEMP/grace-shop.jks"
           export GS_STORE_PASS="$(printf '%s' "$GS_STORE_PASS" | tr -d '[:space:]')"
           export GS_KEY_PASS="$GS_STORE_PASS"
